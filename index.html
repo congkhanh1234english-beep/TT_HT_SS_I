@@ -1,0 +1,532 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>IPA MASTER – I đặc biệt đọc /ɜː/</title>
+<style>
+:root {
+  --navy:#163e5c; --navy2:#276b8e; --bg:#eef3f7; --line:#cbd8e4;
+  --text:#102941; --muted:#64798b; --ipa:#ea4a08; --accent:#245f84;
+  --soft:#e4f2ef; --root:#e8f5ff; --prefix:#f1ecff; --suffix:#ebf8ee;
+  --combo:#fff4e7; --focus:#ecf8ff;
+}
+*{box-sizing:border-box}
+html,body{
+  margin:0;background:var(--bg);color:var(--text);
+  font-family:"Segoe UI","Noto Sans","Arial","Tahoma",sans-serif;
+  font-size:20px
+}
+button,input,select{font:inherit}
+button{cursor:pointer}
+.top{
+  position:sticky;top:0;z-index:30;
+  background:linear-gradient(90deg,var(--navy),var(--navy2));
+  color:white;padding:18px 24px;box-shadow:0 2px 9px rgba(0,0,0,.14)
+}
+.top h1{margin:0;font-size:35px}
+.top p{margin:7px 0 0;font-size:17px;line-height:1.45}
+.wrap{max-width:1480px;margin:auto;padding:15px 17px 42px}
+.panel{
+  background:white;border:1px solid var(--line);border-radius:15px;
+  padding:16px;margin-bottom:14px
+}
+.hero{
+  display:grid;grid-template-columns:1.25fr 1fr;gap:14px;align-items:stretch
+}
+.focus{
+  background:linear-gradient(145deg,#eaf8ff,#f8fcff);
+  border:1px solid #bdd9e9;border-radius:14px;padding:20px
+}
+.focusSound{font-size:70px;font-weight:950;color:#1e668f;line-height:1}
+.focus h2{margin:8px 0 5px;font-size:27px}
+.focus p{margin:0;color:#516a7e;line-height:1.55;font-size:17px}
+.quickStats{
+  display:grid;grid-template-columns:1fr 1fr;gap:10px
+}
+.stat{
+  border:1px solid var(--line);border-radius:12px;background:#fff;padding:14px
+}
+.stat b{display:block;font-size:28px;color:#1d577d}
+.stat span{font-size:14px;color:var(--muted);font-weight:700}
+.note{
+  margin-top:12px;padding:12px 14px;border-left:4px solid #df9c22;
+  background:#fff8e8;border-radius:9px;color:#694a16;font-size:15px;line-height:1.55
+}
+.toolbar{
+  display:grid;grid-template-columns:2fr 1.3fr 1.1fr;gap:11px;align-items:end
+}
+.field label{display:block;font-size:14px;font-weight:900;color:var(--muted);margin-bottom:7px}
+.field input,.field select{
+  width:100%;padding:12px 13px;border:1px solid var(--line);
+  border-radius:10px;background:white;font-size:18px
+}
+.controls,.tabs,.familyButtons{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.controls{margin-top:12px} .tabs{margin:12px 0}
+.controls button,.tabs button,.famBtn{
+  border:1px solid var(--line);background:white;border-radius:999px;
+  padding:10px 14px;font-weight:900;color:#31516b;font-size:16px
+}
+.tabs button.active,.famBtn.active{background:var(--accent);color:white;border-color:var(--accent)}
+.page.hidden{display:none}
+.resultInfo{display:flex;gap:8px;flex-wrap:wrap;margin:9px 0}
+.chip{
+  background:#edf5fb;color:#24506e;border-radius:999px;padding:7px 11px;
+  font-size:14px;font-weight:900
+}
+.block{
+  background:#f8fbfd;border:1px solid var(--line);border-radius:14px;
+  overflow:hidden;margin:10px 0 14px
+}
+.blockHead{
+  width:100%;border:0;background:#f1f7fb;padding:13px 15px;
+  display:flex;gap:9px;align-items:center;text-align:left;
+  color:#183d59;font-weight:900;font-size:21px
+}
+.blockHead:hover{background:#e9f3f9}
+.block.closed>.blockBody{display:none}
+.arrow{transition:.15s}
+.block.closed .arrow{transform:rotate(-90deg)}
+.familyName{font-size:23px;color:#1d5578;text-transform:uppercase}
+.count{font-size:13px;color:var(--muted)}
+.blockBody{padding:11px}
+.grid{
+  display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:11px
+}
+.card{
+  background:white;border:1px solid var(--line);border-top:4px solid #2f7da6;
+  border-radius:12px;padding:14px 12px;min-height:165px;
+  display:flex;flex-direction:column;justify-content:center
+}
+.card:hover{box-shadow:0 3px 11px rgba(16,41,65,.09);transform:translateY(-1px)}
+.wordRow{display:flex;align-items:center;gap:8px}
+.word{font-size:26px;font-weight:950;overflow-wrap:anywhere}
+.speak{
+  border:0;background:var(--soft);border-radius:9px;padding:6px 8px;
+  min-width:40px;height:38px;font-size:19px
+}
+.ipa{margin-top:7px;color:var(--ipa);font-size:24px;font-weight:950;overflow-wrap:anywhere}
+.meaning{display:none;margin-top:8px;color:#4c6376;font-size:17px;line-height:1.45}
+.showMeaning .meaning{display:block}
+.meta{margin-top:8px;color:#6d8090;font-size:13px;line-height:1.42}
+.badge{
+  display:inline-block;margin-top:8px;width:max-content;max-width:100%;
+  padding:4px 8px;border-radius:999px;background:#e8f4fb;color:#28688e;
+  font-size:12px;font-weight:900
+}
+.morphSection{
+  border:1px solid var(--line);border-radius:12px;overflow:hidden;
+  margin:12px 0 15px;background:#fff
+}
+.morphHead{
+  display:flex;align-items:center;gap:9px;padding:10px 12px;
+  border-bottom:1px solid var(--line);font-size:18px;font-weight:950
+}
+.morphHead.root{background:var(--root);color:#15557d}
+.morphHead.prefix{background:var(--prefix);color:#62469b}
+.morphHead.suffix{background:var(--suffix);color:#2f7042}
+.morphHead.combo{background:var(--combo);color:#8b5b16}
+.morphCount{margin-left:auto;font-size:13px;color:#6a7f91}
+.familyIntro{
+  padding:11px 12px;margin-bottom:12px;border:1px dashed #bbcfde;
+  border-radius:10px;background:#f8fbfd;color:#536b7d;font-size:14px;line-height:1.5
+}
+.summary{width:100%;border-collapse:collapse}
+.summary th,.summary td{border:1px solid var(--line);padding:10px 11px;text-align:left;font-size:15px}
+.summary th{background:#f1f7fb}
+.empty{padding:20px;text-align:center;color:var(--muted)}
+
+/* QUIZ */
+.quizBox{max-width:900px;margin:auto}
+.quizHeader{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.progress{height:10px;background:#edf2f5;border-radius:999px;overflow:hidden;margin:13px 0}
+.progress div{height:100%;background:#2c759e;width:0;transition:.2s}
+.quizWord{font-size:42px;text-align:center;font-weight:950;margin:18px 0 4px}
+.quizPrompt{text-align:center;color:#5c7285;font-weight:800}
+.answers{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:17px}
+.answer{
+  border:1px solid var(--line);background:white;border-radius:12px;
+  padding:14px;font-weight:850;line-height:1.4
+}
+.answer:hover{background:#f3f8fb}
+.answer.correct{background:#e8f7ed;border-color:#79ba8b}
+.answer.wrong{background:#fff0ee;border-color:#d88f84}
+.quizMsg{min-height:27px;text-align:center;font-weight:900;margin-top:12px}
+.primary{background:var(--accent)!important;color:white!important;border-color:var(--accent)!important}
+footer{text-align:center;color:var(--muted);font-size:14px;padding:18px}
+@media(max-width:1150px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+@media(max-width:900px){
+  .hero{grid-template-columns:1fr} .toolbar{grid-template-columns:1fr 1fr}
+  .grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(max-width:650px){
+  .toolbar{grid-template-columns:1fr} .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .quickStats{grid-template-columns:1fr 1fr} .answers{grid-template-columns:1fr}
+  .top{position:relative}
+}
+@media(max-width:420px){.grid{grid-template-columns:1fr} .quickStats{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="top">
+  <h1>IPA MASTER – NGUYÊN ÂM I ĐẶC BIỆT</h1>
+  <p>Chữ I trong bộ Special Sounds · Trọng tâm /ɜː/ · Word Family · Cấu tạo từ · IPA · Audio · Font Việt hóa</p>
+</header>
+
+<div class="wrap">
+<section class="panel hero">
+  <div class="focus">
+    <div class="focusSound">/ɜː/</div>
+    <h2>I đặc biệt đọc là /ɜː/</h2>
+    <p>Tài liệu tập trung các Word Family có chữ <b>IR</b>, ví dụ: sir, fir, stir, whir, bird, third, firm, dirt, skirt, shirt, flirt, squirt...</p>
+    <div class="note">
+      <b>Lưu ý nguồn:</b> app giữ nguyên phiên âm IPA được ghi trong tài liệu, kể cả cách tài liệu thể hiện chữ <b>r</b> sau /ɜː/. 
+      Mỗi từ đều ghi rõ trang nguồn để tiện đối chiếu.
+    </div>
+  </div>
+
+  <div class="quickStats">
+    <div class="stat"><b>39</b><span>trang tài liệu nguồn</span></div>
+    <div class="stat"><b>23</b><span>Word Family</span></div>
+    <div class="stat"><b>151</b><span>dòng từ vựng</span></div>
+    <div class="stat"><b>151</b><span>từ không trùng</span></div>
+  </div>
+</section>
+
+<section class="panel">
+  <div class="toolbar">
+    <div class="field">
+      <label>Tìm từ / IPA / nghĩa / cấu trúc</label>
+      <input id="search" placeholder="Ví dụ: bird, firm, shirt, birth, thirst...">
+    </div>
+    <div class="field">
+      <label>Word Family</label>
+      <select id="familyFilter">
+        <option value="all">Tất cả Word Family</option>
+        <option value="sir">SIR · 2 từ</option><option value="fir">FIR · 2 từ</option><option value="stir">STIR · 9 từ</option><option value="whir">WHIR · 4 từ</option><option value="bird">BIRD · 6 từ</option><option value="third">THIRD · 4 từ</option><option value="firm">FIRM · 15 từ</option><option value="dirt">DIRT · 10 từ</option><option value="skirt">SKIRT · 8 từ</option><option value="shirt">SHIRT · 5 từ</option><option value="flirt">FLIRT · 9 từ</option><option value="squirt">SQUIRT · 6 từ</option><option value="squirm">SQUIRM · 6 từ</option><option value="girl">GIRL · 7 từ</option><option value="swirl">SWIRL · 4 từ</option><option value="twirl">TWIRL · 6 từ</option><option value="whirl">WHIRL · 7 từ</option><option value="birth">BIRTH · 7 từ</option><option value="mirth">MIRTH · 8 từ</option><option value="first">FIRST · 3 từ</option><option value="smirk">SMIRK · 6 từ</option><option value="chirp">CHIRP · 6 từ</option><option value="thirst">THIRST · 11 từ</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Kiểu cấu tạo từ</label>
+      <select id="morphFilter">
+        <option value="all">Tất cả cấu tạo</option>
+        <option value="root">Từ gốc</option>
+        <option value="prefix">Thêm tiền tố</option>
+        <option value="suffix">Thêm hậu tố / biến đổi</option>
+        <option value="combo">Tiền tố + hậu tố / mở rộng</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="controls">
+    <button id="meaningBtn">Hiện nghĩa</button>
+    <button id="openAll">Mở tất cả</button>
+    <button id="closeAll">Thu gọn tất cả</button>
+    <select id="voice" style="padding:9px 12px;border:1px solid var(--line);border-radius:999px">
+      <option value="">Giọng đọc tự động</option>
+    </select>
+  </div>
+</section>
+
+<div class="tabs">
+  <button class="active" data-page="allPage">TOÀN BỘ TỪ</button>
+  <button data-page="familyPage">WORD FAMILY</button>
+  <button data-page="quizPage">LUYỆN 10 CÂU</button>
+  <button data-page="statsPage">THỐNG KÊ</button>
+</div>
+
+<section id="allPage" class="page">
+  <div class="panel">
+    <div class="resultInfo" id="allInfo"></div>
+    <div id="allBlocks"></div>
+  </div>
+</section>
+
+<section id="familyPage" class="page hidden">
+  <div class="panel">
+    <h2 style="margin:0 0 10px">Word Family – Tách từ gốc / tiền tố / hậu tố</h2>
+    <div id="familyButtons" class="familyButtons"><button class="famBtn" data-family="sir">SIR</button><button class="famBtn" data-family="fir">FIR</button><button class="famBtn" data-family="stir">STIR</button><button class="famBtn" data-family="whir">WHIR</button><button class="famBtn" data-family="bird">BIRD</button><button class="famBtn" data-family="third">THIRD</button><button class="famBtn" data-family="firm">FIRM</button><button class="famBtn" data-family="dirt">DIRT</button><button class="famBtn" data-family="skirt">SKIRT</button><button class="famBtn" data-family="shirt">SHIRT</button><button class="famBtn" data-family="flirt">FLIRT</button><button class="famBtn" data-family="squirt">SQUIRT</button><button class="famBtn" data-family="squirm">SQUIRM</button><button class="famBtn" data-family="girl">GIRL</button><button class="famBtn" data-family="swirl">SWIRL</button><button class="famBtn" data-family="twirl">TWIRL</button><button class="famBtn" data-family="whirl">WHIRL</button><button class="famBtn" data-family="birth">BIRTH</button><button class="famBtn" data-family="mirth">MIRTH</button><button class="famBtn" data-family="first">FIRST</button><button class="famBtn" data-family="smirk">SMIRK</button><button class="famBtn" data-family="chirp">CHIRP</button><button class="famBtn" data-family="thirst">THIRST</button></div>
+    <div class="resultInfo" id="familyInfo"></div>
+    <div id="familyBlocks"></div>
+  </div>
+</section>
+
+<section id="quizPage" class="page hidden">
+  <div class="panel quizBox">
+    <div class="quizHeader">
+      <b>Luyện 10 câu từ dữ liệu /ɜː/</b>
+      <span>Điểm cao nhất: <b id="best">0/10</b></span>
+    </div>
+    <div class="progress"><div id="progressBar"></div></div>
+    <div id="quizArea"><div class="empty">Bấm “Bắt đầu” để luyện.</div></div>
+    <div style="text-align:center;margin-top:14px">
+      <button class="primary" id="startQuiz" style="border:1px solid var(--line);border-radius:999px;padding:10px 16px;font-weight:900">Bắt đầu / Làm lại</button>
+    </div>
+  </div>
+</section>
+
+<section id="statsPage" class="page hidden">
+  <div class="panel">
+    <h2 style="margin:0 0 10px">Thống kê dữ liệu</h2>
+    <div class="resultInfo">
+      <span class="chip">Từ gốc: 23</span>
+      <span class="chip">Thêm tiền tố: 6</span>
+      <span class="chip">Thêm hậu tố/biến đổi: 113</span>
+      <span class="chip">Mở rộng: 9</span>
+    </div>
+    <table class="summary">
+      <thead><tr><th>Word Family</th><th>IPA từ gốc</th><th>Tổng từ</th><th>Tiền tố</th><th>Hậu tố/biến đổi</th></tr></thead>
+      <tbody><tr><td><b>SIR</b></td><td>/sɜːr/</td><td>2</td><td>0</td><td>1</td></tr><tr><td><b>FIR</b></td><td>/fɜːr/</td><td>2</td><td>0</td><td>1</td></tr><tr><td><b>STIR</b></td><td>/stɜːr/</td><td>9</td><td>0</td><td>7</td></tr><tr><td><b>WHIR</b></td><td>/wɜːr/</td><td>4</td><td>0</td><td>3</td></tr><tr><td><b>BIRD</b></td><td>/bɜːrd/</td><td>6</td><td>0</td><td>5</td></tr><tr><td><b>THIRD</b></td><td>/θɜːrd/</td><td>4</td><td>0</td><td>3</td></tr><tr><td><b>FIRM</b></td><td>/fɜːrm/</td><td>15</td><td>2</td><td>8</td></tr><tr><td><b>DIRT</b></td><td>/dɜːrt/</td><td>10</td><td>0</td><td>9</td></tr><tr><td><b>SKIRT</b></td><td>/skɜːrt/</td><td>8</td><td>2</td><td>3</td></tr><tr><td><b>SHIRT</b></td><td>/ʃɜːrt/</td><td>5</td><td>1</td><td>2</td></tr><tr><td><b>FLIRT</b></td><td>/flɜːrt/</td><td>9</td><td>0</td><td>8</td></tr><tr><td><b>SQUIRT</b></td><td>/skwɜːrt/</td><td>6</td><td>0</td><td>5</td></tr><tr><td><b>SQUIRM</b></td><td>/skwɜːrm/</td><td>6</td><td>0</td><td>5</td></tr><tr><td><b>GIRL</b></td><td>/ɡɜːrl/</td><td>7</td><td>0</td><td>6</td></tr><tr><td><b>SWIRL</b></td><td>/swɜːrl/</td><td>4</td><td>0</td><td>3</td></tr><tr><td><b>TWIRL</b></td><td>/twɜːrl/</td><td>6</td><td>0</td><td>5</td></tr><tr><td><b>WHIRL</b></td><td>/wɜːrl/</td><td>7</td><td>0</td><td>6</td></tr><tr><td><b>BIRTH</b></td><td>/bɜːrθ/</td><td>7</td><td>1</td><td>4</td></tr><tr><td><b>MIRTH</b></td><td>/mɜːrθ/</td><td>8</td><td>0</td><td>7</td></tr><tr><td><b>FIRST</b></td><td>/fɜːrst/</td><td>3</td><td>0</td><td>2</td></tr><tr><td><b>SMIRK</b></td><td>/smɜːrk/</td><td>6</td><td>0</td><td>5</td></tr><tr><td><b>CHIRP</b></td><td>/tʃɜːrp/</td><td>6</td><td>0</td><td>5</td></tr><tr><td><b>THIRST</b></td><td>/θɜːrst/</td><td>11</td><td>0</td><td>10</td></tr></tbody>
+    </table>
+  </div>
+</section>
+
+<footer>Nguồn: Gia đình từ i - Special Sounds.pdf · Chạy offline trên Chrome/Edge</footer>
+</div>
+
+<script>
+const DATA=[{"word":"sir","structure":"gốc từ","ipa":"/sɜːr/","meaning":"ngài, ông (được dùng như một cách xưng hô tôn trọng)","pos":"Danh từ","family":"sir","page":1,"target":true,"morph":"root"},{"word":"sirs","structure":"sir + s","ipa":"/sɜːrz/","meaning":"các ngài, các ông (số nhiều)","pos":"Danh từ (số nhiều)","family":"sir","page":1,"target":true,"morph":"suffix"},{"word":"fir","structure":"gốc từ","ipa":"/fɜːr/","meaning":"cây thông (một loại cây có lá kim, thường được sử dụng trong trang trí và xây dựng)","pos":"Danh từ","family":"fir","page":2,"target":true,"morph":"root"},{"word":"firs","structure":"fir + s","ipa":"/fɜːrz/","meaning":"các cây thông (số nhiều)","pos":"Danh từ (số nhiều)","family":"fir","page":2,"target":true,"morph":"suffix"},{"word":"stir","structure":"gốc từ","ipa":"/stɜːr/","meaning":"khuấy, đảo (thường chỉ hành động khuấy thức ăn hoặc chất lỏng)","pos":"Động từ","family":"stir","page":3,"target":true,"morph":"root"},{"word":"stirred","structure":"stir + ed","ipa":"/stɜːrd/","meaning":"đã được khuấy, đã được đảo (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"stir","page":3,"target":true,"morph":"suffix"},{"word":"unstirred","structure":"un + stirred","ipa":"/ʌnˈstɜːrd/","meaning":"chưa được khuấy, chưa được đảo","pos":"Tính từ","family":"stir","page":4,"target":true,"morph":"combo"},{"word":"stirring","structure":"stir + ing","ipa":"/ˈstɜːr.ɪŋ/","meaning":"hành động khuấy, đảo hoặc có khả năng kích thích, gợi cảm xúc","pos":"Hiện tại phân từ","family":"stir","page":4,"target":true,"morph":"suffix"},{"word":"stirrings","structure":"stirring + s","ipa":"/ˈstɜːr.ɪŋz/","meaning":"các hành động khuấy, đảo hoặc các cảm xúc, sự kích thích (số nhiều)","pos":"Danh từ (số nhiều)","family":"stir","page":4,"target":true,"morph":"suffix"},{"word":"stirringly","structure":"stirring + ly","ipa":"/ˈstɜːr.ɪŋ.li/","meaning":"một cách kích thích, gợi cảm xúc","pos":"Trạng từ","family":"stir","page":4,"target":true,"morph":"suffix"},{"word":"stirs","structure":"stir + s","ipa":"/stɜːrz/","meaning":"khuấy (ngôi thứ ba số ít)","pos":"Động từ (ngôi thứ ba số ít)","family":"stir","page":4,"target":true,"morph":"suffix"},{"word":"stirrer","structure":"stir + er","ipa":"/ˈstɜːr.ər/","meaning":"dụng cụ khuấy hoặc người khuấy","pos":"Danh từ","family":"stir","page":4,"target":true,"morph":"suffix"},{"word":"stirrers","structure":"stirrer + s","ipa":"/ˈstɜːr.ərz/","meaning":"các dụng cụ khuấy hoặc những người khuấy","pos":"Danh từ (số nhiều)","family":"stir","page":4,"target":true,"morph":"suffix"},{"word":"whir","structure":"gốc từ","ipa":"/wɜːr/","meaning":"phát ra tiếng kêu vù vù (thường chỉ âm thanh của máy móc hoặc cánh quạt)","pos":"Động từ","family":"whir","page":5,"target":true,"morph":"root"},{"word":"whirs","structure":"whir + s","ipa":"/wɜːrz/","meaning":"phát ra tiếng kêu vù vù (ngôi thứ ba số ít)","pos":"Động từ (ngôi thứ ba số ít)","family":"whir","page":5,"target":true,"morph":"suffix"},{"word":"whirred","structure":"whir + ed","ipa":"/wɜːrd/","meaning":"đã phát ra tiếng kêu vù vù (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"whir","page":5,"target":true,"morph":"suffix"},{"word":"whirring","structure":"whir + ing","ipa":"/ˈwɜːr.ɪŋ/","meaning":"hành động phát ra tiếng kêu vù vù","pos":"Hiện tại phân từ","family":"whir","page":5,"target":true,"morph":"suffix"},{"word":"bird","structure":"gốc từ","ipa":"/bɜːrd/","meaning":"chim, loài chim","pos":"Danh từ","family":"bird","page":6,"target":true,"morph":"root"},{"word":"birds","structure":"bird + s","ipa":"/bɜːrdz/","meaning":"các loài chim (số nhiều)","pos":"Danh từ (số nhiều)","family":"bird","page":6,"target":true,"morph":"suffix"},{"word":"birding","structure":"bird + ing","ipa":"/ˈbɜːrd.ɪŋ/","meaning":"hành động quan sát chim, thường như một sở thích","pos":"Hiện tại phân từ","family":"bird","page":6,"target":true,"morph":"suffix"},{"word":"birder","structure":"bird + er","ipa":"/ˈbɜːr.dər/","meaning":"người quan sát chim","pos":"Danh từ","family":"bird","page":6,"target":true,"morph":"suffix"},{"word":"birders","structure":"birder + s","ipa":"/ˈbɜːr.dərz/","meaning":"những người quan sát chim (số nhiều)","pos":"Danh từ (số nhiều)","family":"bird","page":6,"target":true,"morph":"suffix"},{"word":"birded","structure":"bird + ed","ipa":"/bɜːrdɪd/","meaning":"đã quan sát chim (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"bird","page":7,"target":true,"morph":"suffix"},{"word":"third","structure":"gốc từ","ipa":"/θɜːrd/","meaning":"thứ ba, một phần ba","pos":"Tính từ / Danh từ","family":"third","page":8,"target":true,"morph":"root"},{"word":"thirdly","structure":"third + ly","ipa":"/ˈθɜːrd.li/","meaning":"một cách thứ ba, chỉ ra thứ ba trong một danh sách","pos":"Trạng từ","family":"third","page":8,"target":true,"morph":"suffix"},{"word":"thirdlys","structure":"thirdly + s","ipa":"/ˈθɜːrd.liːz/","meaning":"các cách thứ ba (số nhiều, ít dùng)","pos":"Trạng từ (số nhiều)","family":"third","page":8,"target":true,"morph":"suffix"},{"word":"thirds","structure":"third + s","ipa":"/θɜːrdz/","meaning":"các phần ba (số nhiều)","pos":"Danh từ (số nhiều)","family":"third","page":8,"target":true,"morph":"suffix"},{"word":"firm","structure":"gốc từ","ipa":"/fɜːrm/","meaning":"vững chắc, kiên quyết, công ty","pos":"Tính từ / Danh từ","family":"firm","page":9,"target":true,"morph":"root"},{"word":"firmly","structure":"firm + ly","ipa":"/ˈfɜːrm.li/","meaning":"một cách kiên quyết, chắc chắn","pos":"Trạng từ","family":"firm","page":9,"target":true,"morph":"suffix"},{"word":"firms","structure":"firm + s","ipa":"/fɜːrmz/","meaning":"các công ty (số nhiều)","pos":"Danh từ (số nhiều)","family":"firm","page":9,"target":true,"morph":"suffix"},{"word":"firmness","structure":"firm + ness","ipa":"/ˈfɜːrm.nəs/","meaning":"tính kiên quyết, sự vững chắc","pos":"Danh từ","family":"firm","page":9,"target":true,"morph":"suffix"},{"word":"firmnesses","structure":"firmness + es","ipa":"/ˈfɜːrm.nəs.ɪz/","meaning":"các tính kiên quyết (số nhiều)","pos":"Danh từ (số nhiều)","family":"firm","page":9,"target":true,"morph":"suffix"},{"word":"firmer","structure":"firm + er","ipa":"/ˈfɜːr.mər/","meaning":"kiên quyết hơn, chắc chắn hơn","pos":"Tính từ","family":"firm","page":9,"target":true,"morph":"suffix"},{"word":"infirm","structure":"gốc từ","ipa":"/ɪnˈfɜːrm/","meaning":"yếu đuối, không khỏe, thường chỉ người già hoặc người bệnh","pos":"Tính từ","family":"firm","page":10,"target":true,"morph":"prefix"},{"word":"infirmity","structure":"infirm + ity","ipa":"/ɪnˈfɜːr.mə.ti/","meaning":"tình trạng yếu đuối, bệnh tật","pos":"Danh từ","family":"firm","page":10,"target":true,"morph":"combo"},{"word":"infirmities","structure":"infirmity + ies","ipa":"/ɪnˈfɜːr.mə.tiz/","meaning":"các tình trạng yếu đuối (số nhiều)","pos":"Danh từ (số nhiều)","family":"firm","page":10,"target":true,"morph":"combo"},{"word":"infirmly","structure":"infirm + ly","ipa":"/ɪnˈfɜːr.mli/","meaning":"một cách yếu đuối, không khỏe","pos":"Trạng từ","family":"firm","page":10,"target":true,"morph":"combo"},{"word":"infirmer","structure":"infirm + er","ipa":"/ɪnˈfɜːrmər/","meaning":"người yếu đuối hơn, người không khỏe","pos":"Danh từ","family":"firm","page":10,"target":true,"morph":"combo"},{"word":"firmest","structure":"firm + est","ipa":"/ˈfɜːr.məst/","meaning":"chắc chắn nhất, kiên quyết nhất","pos":"Tính từ","family":"firm","page":10,"target":true,"morph":"suffix"},{"word":"firmed","structure":"firm + ed","ipa":"/fɜːrmd/","meaning":"đã được làm vững chắc","pos":"Quá khứ phân từ","family":"firm","page":10,"target":true,"morph":"suffix"},{"word":"firming","structure":"firm + ing","ipa":"/ˈfɜːrm.ɪŋ/","meaning":"hành động làm vững chắc","pos":"Hiện tại phân từ","family":"firm","page":10,"target":true,"morph":"suffix"},{"word":"unfirm","structure":"un + firm","ipa":"/ʌnˈfɜːrm/","meaning":"không chắc chắn, không kiên quyết","pos":"Tính từ","family":"firm","page":10,"target":true,"morph":"prefix"},{"word":"dirt","structure":"gốc từ","ipa":"/dɜːrt/","meaning":"bụi bẩn, đất bẩn","pos":"Danh từ","family":"dirt","page":11,"target":true,"morph":"root"},{"word":"dirty","structure":"gốc từ","ipa":"/ˈdɜːr.ti/","meaning":"bẩn, không sạch","pos":"Tính từ","family":"dirt","page":11,"target":true,"morph":"suffix"},{"word":"dirtiest","structure":"dirty + est","ipa":"/ˈdɜːr.ti.əst/","meaning":"bẩn nhất, không sạch nhất","pos":"Tính từ","family":"dirt","page":11,"target":true,"morph":"suffix"},{"word":"dirtier","structure":"dirty + er","ipa":"/ˈdɜːr.ti.ər/","meaning":"bẩn hơn","pos":"Tính từ","family":"dirt","page":12,"target":true,"morph":"suffix"},{"word":"dirtied","structure":"dirty + ed","ipa":"/ˈdɜːr.tiːd/","meaning":"đã trở nên bẩn (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"dirt","page":12,"target":true,"morph":"suffix"},{"word":"dirtiness","structure":"dirty + ness","ipa":"/ˈdɜːr.ti.nəs/","meaning":"tính bẩn, sự không sạch","pos":"Danh từ","family":"dirt","page":12,"target":true,"morph":"suffix"},{"word":"dirtying","structure":"dirty + ing","ipa":"/ˈdɜːr.ti.ɪŋ/","meaning":"hành động làm bẩn","pos":"Hiện tại phân từ","family":"dirt","page":12,"target":true,"morph":"suffix"},{"word":"dirtily","structure":"dirty + ly","ipa":"/ˈdɜːr.ti.li/","meaning":"một cách bẩn thỉu","pos":"Trạng từ","family":"dirt","page":12,"target":true,"morph":"suffix"},{"word":"dirties","structure":"dirty + es","ipa":"/ˈdɜːr.tiz/","meaning":"làm bẩn (ngôi thứ ba số ít)","pos":"Động từ (ngôi thứ ba số ít)","family":"dirt","page":12,"target":true,"morph":"suffix"},{"word":"dirts","structure":"dirt + s","ipa":"/dɜːrts/","meaning":"các bụi bẩn hoặc đất bẩn (số nhiều)","pos":"Danh từ (số nhiều)","family":"dirt","page":12,"target":true,"morph":"suffix"},{"word":"skirt","structure":"gốc từ","ipa":"/skɜːrt/","meaning":"váy, lớp vỏ ngoài, hoặc phần bên ngoài của một vật thể","pos":"Danh từ / Động từ","family":"skirt","page":13,"target":true,"morph":"root"},{"word":"skirts","structure":"skirt + s","ipa":"/skɜːrts/","meaning":"các chiếc váy (số nhiều) hoặc làm cho cái gì đó quay quanh (ngôi thứ ba số ít)","pos":"Danh từ (số nhiều) / Động từ (ngôi thứ ba số ít)","family":"skirt","page":13,"target":true,"morph":"suffix"},{"word":"skirted","structure":"skirt + ed","ipa":"/skɜːr.tɪd/","meaning":"đã được bao quanh hoặc được che phủ","pos":"Quá khứ phân từ","family":"skirt","page":13,"target":true,"morph":"suffix"},{"word":"skirting","structure":"skirt + ing","ipa":"/ˈskɜːr.tɪŋ/","meaning":"hành động bao quanh hoặc che phủ","pos":"Hiện tại phân từ","family":"skirt","page":13,"target":true,"morph":"suffix"},{"word":"underskirt","structure":"under + skirt","ipa":"/ˈʌn.dər.skɜːrt/","meaning":"lớp váy bên trong, thường dùng để tạo độ phồng cho váy bên ngoài","pos":"Danh từ","family":"skirt","page":14,"target":true,"morph":"prefix"},{"word":"underskirts","structure":"underskirt + s","ipa":"/ˈʌn.dər.skɜːrts/","meaning":"các lớp váy bên trong","pos":"Danh từ (số nhiều)","family":"skirt","page":14,"target":true,"morph":"combo"},{"word":"overskirt","structure":"over + skirt","ipa":"/ˈəʊ.vər.skɜːrt/","meaning":"lớp váy bên ngoài, thường dùng để che phủ hoặc trang trí","pos":"Danh từ","family":"skirt","page":14,"target":true,"morph":"prefix"},{"word":"overskirts","structure":"overskirt + s","ipa":"/ˈəʊ.vər.skɜːrts/","meaning":"các lớp váy bên ngoài","pos":"Danh từ (số nhiều)","family":"skirt","page":14,"target":true,"morph":"combo"},{"word":"shirt","structure":"gốc từ","ipa":"/ʃɜːrt/","meaning":"áo sơ mi, áo thun","pos":"Danh từ","family":"shirt","page":15,"target":true,"morph":"root"},{"word":"shirts","structure":"shirt + s","ipa":"/ʃɜːrts/","meaning":"các chiếc áo (số nhiều)","pos":"Danh từ (số nhiều)","family":"shirt","page":15,"target":true,"morph":"suffix"},{"word":"undershirt","structure":"under + shirt","ipa":"/ˈʌn.dər.ʃɜːrt/","meaning":"áo lót, thường mặc bên trong áo sơ mi hoặc áo khác","pos":"Danh từ","family":"shirt","page":15,"target":true,"morph":"prefix"},{"word":"undershirts","structure":"undershirt + s","ipa":"/ˈʌn.dər.ʃɜːrts/","meaning":"các áo lót (số nhiều)","pos":"Danh từ (số nhiều)","family":"shirt","page":15,"target":true,"morph":"combo"},{"word":"shirted","structure":"shirt + ed","ipa":"/ʃɜːr.tɪd/","meaning":"đã mặc áo, được bao phủ bởi áo (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"shirt","page":15,"target":true,"morph":"suffix"},{"word":"flirt","structure":"gốc từ","ipa":"/flɜːrt/","meaning":"tán tỉnh, thể hiện sự quan tâm lãng mạn một cách nhẹ nhàng","pos":"Động từ","family":"flirt","page":16,"target":true,"morph":"root"},{"word":"flirtation","structure":"flirt + ation","ipa":"/flɜːrˈteɪ.ʃən/","meaning":"hành động tán tỉnh, sự tán tỉnh","pos":"Danh từ","family":"flirt","page":16,"target":true,"morph":"suffix"},{"word":"flirtations","structure":"flirtation + s","ipa":"/flɜːrˈteɪ.ʃənz/","meaning":"các hành động tán tỉnh (số nhiều)","pos":"Danh từ (số nhiều)","family":"flirt","page":17,"target":true,"morph":"suffix"},{"word":"flirting","structure":"flirt + ing","ipa":"/ˈflɜːr.tɪŋ/","meaning":"hành động tán tỉnh","pos":"Hiện tại phân từ","family":"flirt","page":17,"target":true,"morph":"suffix"},{"word":"flirtings","structure":"flirting + s","ipa":"/ˈflɜːr.tɪŋz/","meaning":"các hành động tán tỉnh (số nhiều)","pos":"Danh từ (số nhiều)","family":"flirt","page":17,"target":true,"morph":"suffix"},{"word":"flirted","structure":"flirt + ed","ipa":"/flɜːrtɪd/","meaning":"đã tán tỉnh (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"flirt","page":17,"target":true,"morph":"suffix"},{"word":"flirts","structure":"flirt + s","ipa":"/flɜːrts/","meaning":"tán tỉnh (ngôi thứ ba số ít)","pos":"Động từ (ngôi thứ ba số ít)","family":"flirt","page":17,"target":true,"morph":"suffix"},{"word":"flirtatious","structure":"flirt + atious","ipa":"/ˌflɜːrˈteɪ.ʃəs/","meaning":"có vẻ tán tỉnh, thể hiện sự thu hút lãng mạn","pos":"Tính từ","family":"flirt","page":17,"target":true,"morph":"suffix"},{"word":"flirtatiously","structure":"flirtatious + ly","ipa":"/ˌflɜːr. ˈteɪ.ʃəs.li/","meaning":"một cách tán tỉnh, thể hiện sự thu hút lãng mạn","pos":"Trạng từ","family":"flirt","page":17,"target":true,"morph":"suffix"},{"word":"squirt","structure":"gốc từ","ipa":"/skwɜːrt/","meaning":"phun ra, xịt ra (thường chỉ chất lỏng)","pos":"Động từ","family":"squirt","page":18,"target":true,"morph":"root"},{"word":"squirted","structure":"squirt + ed","ipa":"/skwɜːrtɪd/","meaning":"đã được phun ra, đã được xịt ra","pos":"Quá khứ phân từ","family":"squirt","page":18,"target":true,"morph":"suffix"},{"word":"squirting","structure":"squirt + ing","ipa":"/ˈskwɜːr.tɪŋ/","meaning":"hành động phun ra, xịt ra","pos":"Hiện tại phân từ","family":"squirt","page":18,"target":true,"morph":"suffix"},{"word":"squirts","structure":"squirt + s","ipa":"/skwɜːrts/","meaning":"phun ra, xịt ra (ngôi thứ ba số ít)","pos":"Động từ (ngôi thứ ba số ít)","family":"squirt","page":18,"target":true,"morph":"suffix"},{"word":"squirter","structure":"squirt + er","ipa":"/ˈskwɜːr.tər/","meaning":"người hoặc vật phun ra, xịt ra","pos":"Danh từ","family":"squirt","page":19,"target":true,"morph":"suffix"},{"word":"squirters","structure":"squirter + s","ipa":"/ˈskwɜːr.tərz/","meaning":"những người hoặc vật phun ra, xịt ra","pos":"Danh từ (số nhiều)","family":"squirt","page":19,"target":true,"morph":"suffix"},{"word":"squirm","structure":"gốc từ","ipa":"/skwɜːrm/","meaning":"quằn quại, lăn lóc, (thường chỉ hành động của cơ thể khi cảm thấy khó chịu)","pos":"Động từ","family":"squirm","page":20,"target":true,"morph":"root"},{"word":"squirmed","structure":"squirm + ed","ipa":"/skwɜːrmd/","meaning":"đã quằn quại, đã lăn lóc (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"squirm","page":20,"target":true,"morph":"suffix"},{"word":"squirming","structure":"squirm + ing","ipa":"/ˈskwɜːr.mɪŋ/","meaning":"hành động quằn quại, lăn lóc","pos":"Hiện tại phân từ","family":"squirm","page":20,"target":true,"morph":"suffix"},{"word":"squirms","structure":"squirm + s","ipa":"/skwɜːrmz/","meaning":"quằn quại (ngôi thứ ba số ít)","pos":"Động từ (ngôi thứ ba số ít)","family":"squirm","page":21,"target":true,"morph":"suffix"},{"word":"squirmer","structure":"squirm + er","ipa":"/ˈskwɜːr.mər/","meaning":"người quằn quại, người lăn lóc","pos":"Danh từ","family":"squirm","page":21,"target":true,"morph":"suffix"},{"word":"squirmers","structure":"squirmer + s","ipa":"/ˈskwɜːr.mərz/","meaning":"những người quằn quại (số nhiều)","pos":"Danh từ (số nhiều)","family":"squirm","page":21,"target":true,"morph":"suffix"},{"word":"girl","structure":"gốc từ","ipa":"/ɡɜːrl/","meaning":"cô gái, trẻ em gái","pos":"Danh từ","family":"girl","page":22,"target":true,"morph":"root"},{"word":"girls","structure":"girl + s","ipa":"/ɡɜːrlz/","meaning":"các cô gái (số nhiều)","pos":"Danh từ (số nhiều)","family":"girl","page":22,"target":true,"morph":"suffix"},{"word":"girlish","structure":"girl + ish","ipa":"/ˈɡɜːrl.ɪʃ/","meaning":"có tính cách hoặc đặc điểm của một cô gái, ngây thơ","pos":"Tính từ","family":"girl","page":22,"target":true,"morph":"suffix"},{"word":"girlishness","structure":"girlish + ness","ipa":"/ˈɡɜːrl.ɪʃ.nəs/","meaning":"tính trạng ngây thơ, có đặc điểm của cô gái","pos":"Danh từ","family":"girl","page":23,"target":true,"morph":"suffix"},{"word":"girlishly","structure":"girlish + ly","ipa":"/ˈɡɜːrl.ɪʃ.li/","meaning":"một cách ngây thơ, có tính chất của cô gái","pos":"Trạng từ","family":"girl","page":23,"target":true,"morph":"suffix"},{"word":"girlhood","structure":"girl + hood","ipa":"/ˈɡɜːrl.hʊd/","meaning":"thời kỳ thiếu nữ, tuổi thơ của một cô gái","pos":"Danh từ","family":"girl","page":23,"target":true,"morph":"suffix"},{"word":"girlhoods","structure":"girlhood + s","ipa":"/ˈɡɜːrl.hʊdz/","meaning":"các thời kỳ thiếu nữ (số nhiều)","pos":"Danh từ (số nhiều)","family":"girl","page":23,"target":true,"morph":"suffix"},{"word":"swirl","structure":"gốc từ","ipa":"/swɜːrl/","meaning":"xoáy, cuộn, làm cho một chất lỏng hoặc vật thể chuyển động theo hình xoáy","pos":"Động từ","family":"swirl","page":24,"target":true,"morph":"root"},{"word":"swirling","structure":"swirl + ing","ipa":"/ˈswɜːr.lɪŋ/","meaning":"hành động xoáy, cuộn","pos":"Hiện tại phân từ","family":"swirl","page":24,"target":true,"morph":"suffix"},{"word":"swirled","structure":"swirl + ed","ipa":"/swɜːrld/","meaning":"đã xoáy, đã cuộn (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"swirl","page":24,"target":true,"morph":"suffix"},{"word":"swirls","structure":"swirl + s","ipa":"/swɜːrlz/","meaning":"xoáy (ngôi thứ ba số ít)","pos":"Động từ (ngôi thứ ba số ít)","family":"swirl","page":24,"target":true,"morph":"suffix"},{"word":"twirl","structure":"gốc từ","ipa":"/twɜːrl/","meaning":"xoay tròn, quay vòng, thường chỉ hành động xoay một cách nhẹ nhàng","pos":"Động từ","family":"twirl","page":25,"target":true,"morph":"root"},{"word":"twirling","structure":"twirl + ing","ipa":"/ˈtwɜːr.lɪŋ/","meaning":"hành động xoay tròn, quay vòng","pos":"Hiện tại phân từ","family":"twirl","page":25,"target":true,"morph":"suffix"},{"word":"twirled","structure":"twirl + ed","ipa":"/twɜːrld/","meaning":"đã xoay tròn, đã quay vòng (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"twirl","page":25,"target":true,"morph":"suffix"},{"word":"twirls","structure":"twirl + s","ipa":"/twɜːrlz/","meaning":"xoay tròn (ngôi thứ ba số ít)","pos":"Động từ (ngôi thứ ba số ít)","family":"twirl","page":25,"target":true,"morph":"suffix"},{"word":"twirler","structure":"twirl + er","ipa":"/ˈtwɜːr.lər/","meaning":"người xoay tròn, người quay vòng","pos":"Danh từ","family":"twirl","page":25,"target":true,"morph":"suffix"},{"word":"twirlers","structure":"twirler + s","ipa":"/ˈtwɜːr.lərz/","meaning":"những người xoay tròn (số nhiều)","pos":"Danh từ (số nhiều)","family":"twirl","page":26,"target":true,"morph":"suffix"},{"word":"whirl","structure":"gốc từ","ipa":"/wɜːrl/","meaning":"xoay, quay tròn, thường chỉ hành động chuyển động theo hình tròn","pos":"Động từ","family":"whirl","page":27,"target":true,"morph":"root"},{"word":"whirled","structure":"whirl + ed","ipa":"/wɜːrld/","meaning":"đã xoay, đã quay tròn (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"whirl","page":27,"target":true,"morph":"suffix"},{"word":"whirling","structure":"whirl + ing","ipa":"/ˈwɜːr.lɪŋ/","meaning":"hành động xoay, quay tròn","pos":"Hiện tại phân từ","family":"whirl","page":27,"target":true,"morph":"suffix"},{"word":"whirlings","structure":"whirling + s","ipa":"/ˈwɜːr.lɪŋz/","meaning":"các hành động xoay (số nhiều)","pos":"Danh từ (số nhiều)","family":"whirl","page":27,"target":true,"morph":"suffix"},{"word":"whirls","structure":"whirl + s","ipa":"/wɜːrlz/","meaning":"xoay (ngôi thứ ba số ít)","pos":"Động từ (ngôi thứ ba số ít)","family":"whirl","page":27,"target":true,"morph":"suffix"},{"word":"whirler","structure":"whirl + er","ipa":"/ˈwɜːr.lər/","meaning":"người xoay tròn, người quay","pos":"Danh từ","family":"whirl","page":28,"target":true,"morph":"suffix"},{"word":"whirlers","structure":"whirler + s","ipa":"/ˈwɜːr.lərz/","meaning":"những người xoay tròn (số nhiều)","pos":"Danh từ (số nhiều)","family":"whirl","page":28,"target":true,"morph":"suffix"},{"word":"birth","structure":"gốc từ","ipa":"/bɜːrθ/","meaning":"sự ra đời, sự sinh sản","pos":"Danh từ","family":"birth","page":29,"target":true,"morph":"root"},{"word":"births","structure":"birth + s","ipa":"/bɜːrθs/","meaning":"các sự ra đời (số nhiều)","pos":"Danh từ (số nhiều)","family":"birth","page":29,"target":true,"morph":"suffix"},{"word":"rebirth","structure":"re + birth","ipa":"/riːˈbɜːrθ/","meaning":"sự tái sinh, sự sinh lại","pos":"Danh từ","family":"birth","page":29,"target":true,"morph":"prefix"},{"word":"rebirths","structure":"rebirth + s","ipa":"/riːˈbɜːrθs/","meaning":"các sự tái sinh (số nhiều)","pos":"Danh từ (số nhiều)","family":"birth","page":29,"target":true,"morph":"combo"},{"word":"birthing","structure":"birth + ing","ipa":"/ˈbɜːr.θɪŋ/","meaning":"hành động sinh con, quá trình sinh sản","pos":"Hiện tại phân từ","family":"birth","page":29,"target":true,"morph":"suffix"},{"word":"birthings","structure":"birthing + s","ipa":"/ˈbɜːr.θɪŋz/","meaning":"các hành động sinh con (số nhiều)","pos":"Danh từ (số nhiều)","family":"birth","page":30,"target":true,"morph":"suffix"},{"word":"birthed","structure":"birth + ed","ipa":"/bɜːrθt/","meaning":"đã sinh ra (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"birth","page":30,"target":true,"morph":"suffix"},{"word":"mirth","structure":"gốc từ","ipa":"/mɜːrθ/","meaning":"niềm vui, sự vui vẻ, tiếng cười","pos":"Danh từ","family":"mirth","page":31,"target":true,"morph":"root"},{"word":"mirthful","structure":"mirth + ful","ipa":"/ˈmɜːrθ.fəl/","meaning":"đầy niềm vui, vui vẻ","pos":"Tính từ","family":"mirth","page":31,"target":true,"morph":"suffix"},{"word":"mirthfulness","structure":"mirthful + ness","ipa":"/ˈmɜːrθ.fəl.nəs/","meaning":"tính vui vẻ, sự hạnh phúc","pos":"Danh từ","family":"mirth","page":31,"target":true,"morph":"suffix"},{"word":"mirthfully","structure":"mirthful + ly","ipa":"/ˈmɜːrθ.fəl.i/","meaning":"một cách vui vẻ, hạnh phúc","pos":"Trạng từ","family":"mirth","page":32,"target":true,"morph":"suffix"},{"word":"mirthfulest","structure":"mirthful + est","ipa":"/ˈmɜːrθ.fəl.ɪst/","meaning":"vui vẻ nhất","pos":"Tính từ","family":"mirth","page":32,"target":true,"morph":"suffix"},{"word":"mirthless","structure":"mirth + less","ipa":"/ˈmɜːrθ.ləs/","meaning":"không có niềm vui, buồn bã","pos":"Tính từ","family":"mirth","page":32,"target":true,"morph":"suffix"},{"word":"mirthlessly","structure":"mirthless + ly","ipa":"/ˈmɜːrθ.ləs.li/","meaning":"một cách không vui vẻ, buồn bã","pos":"Trạng từ","family":"mirth","page":32,"target":true,"morph":"suffix"},{"word":"mirths","structure":"mirth + s","ipa":"/mɜːrθs/","meaning":"các niềm vui, tiếng cười (số nhiều)","pos":"Danh từ (số nhiều)","family":"mirth","page":32,"target":true,"morph":"suffix"},{"word":"first","structure":"gốc từ","ipa":"/fɜːrst/","meaning":"thứ nhất, đầu tiên","pos":"Tính từ / Trạng từ","family":"first","page":33,"target":true,"morph":"root"},{"word":"firstly","structure":"first + ly","ipa":"/ˈfɜːrst.li/","meaning":"trước hết, trước tiên, thường được dùng để liệt kê","pos":"Trạng từ","family":"first","page":33,"target":true,"morph":"suffix"},{"word":"firsts","structure":"first + s","ipa":"/fɜːrsts/","meaning":"các điều đầu tiên (số nhiều)","pos":"Danh từ (số nhiều)","family":"first","page":33,"target":true,"morph":"suffix"},{"word":"smirk","structure":"gốc từ","ipa":"/smɜːrk/","meaning":"cười nhếch mép, cười một cách kiêu ngạo hoặc tự mãn","pos":"Động từ","family":"smirk","page":34,"target":true,"morph":"root"},{"word":"smirking","structure":"smirk + ing","ipa":"/ˈsmɜːr.kɪŋ/","meaning":"hành động cười nhếch mép","pos":"Hiện tại phân từ","family":"smirk","page":34,"target":true,"morph":"suffix"},{"word":"smirked","structure":"smirk + ed","ipa":"/smɜːrkd/","meaning":"đã cười nhếch mép (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"smirk","page":34,"target":true,"morph":"suffix"},{"word":"smirks","structure":"smirk + s","ipa":"/smɜːrks/","meaning":"cười nhếch mép (ngôi thứ ba số ít)","pos":"Động từ (ngôi thứ ba số ít)","family":"smirk","page":34,"target":true,"morph":"suffix"},{"word":"smirker","structure":"smirk + er","ipa":"/ˈsmɜːr.kər/","meaning":"người cười nhếch mép, người có thái độ kiêu ngạo","pos":"Danh từ","family":"smirk","page":35,"target":true,"morph":"suffix"},{"word":"smirkers","structure":"smirker + s","ipa":"/ˈsmɜːr.kərz/","meaning":"những người cười nhếch mép (số nhiều)","pos":"Danh từ (số nhiều)","family":"smirk","page":35,"target":true,"morph":"suffix"},{"word":"chirp","structure":"gốc từ","ipa":"/tʃɜːrp/","meaning":"kêu, hót (thường chỉ âm thanh của chim hoặc côn trùng)","pos":"Động từ","family":"chirp","page":36,"target":true,"morph":"root"},{"word":"chirping","structure":"chirp + ing","ipa":"/ˈtʃɜːr.pɪŋ/","meaning":"hành động kêu, hót","pos":"Hiện tại phân từ","family":"chirp","page":36,"target":true,"morph":"suffix"},{"word":"chirped","structure":"chirp + ed","ipa":"/tʃɜːrpt/","meaning":"đã kêu, đã hót (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"chirp","page":36,"target":true,"morph":"suffix"},{"word":"chirpy","structure":"gốc từ","ipa":"/ˈtʃɜːr.pi/","meaning":"vui vẻ, hoạt bát (thường mô tả tâm trạng hoặc âm thanh vui tươi)","pos":"Tính từ","family":"chirp","page":37,"target":true,"morph":"suffix"},{"word":"chirpiness","structure":"chirpy + ness","ipa":"/ˈtʃɜːr.pi.nəs/","meaning":"tính vui vẻ, sự hoạt bát","pos":"Danh từ","family":"chirp","page":37,"target":true,"morph":"suffix"},{"word":"chirps","structure":"chirp + s","ipa":"/tʃɜːrps/","meaning":"các âm kêu, các tiếng hót (số nhiều)","pos":"Danh từ (số nhiều)","family":"chirp","page":37,"target":true,"morph":"suffix"},{"word":"thirst","structure":"gốc từ","ipa":"/θɜːrst/","meaning":"cơn khát, sự khao khát","pos":"Danh từ","family":"thirst","page":38,"target":true,"morph":"root"},{"word":"thirsty","structure":"thirst + y","ipa":"/ˈθɜːrsti/","meaning":"khát, cảm thấy cần nước","pos":"Tính từ","family":"thirst","page":38,"target":true,"morph":"suffix"},{"word":"thirstily","structure":"thirsty + ly","ipa":"/ˈθɜːr.sti.li/","meaning":"một cách khát, với sự khao khát","pos":"Trạng từ","family":"thirst","page":38,"target":true,"morph":"suffix"},{"word":"thirstier","structure":"thirsty + er","ipa":"/ˈθɜːrsti.ər/","meaning":"khát hơn","pos":"Tính từ","family":"thirst","page":39,"target":true,"morph":"suffix"},{"word":"thirstiest","structure":"thirsty + est","ipa":"/ˈθɜːrsti.əst/","meaning":"khát nhất","pos":"Tính từ","family":"thirst","page":39,"target":true,"morph":"suffix"},{"word":"thirstiness","structure":"thirsty + ness","ipa":"/ˈθɜːr.sti.nəs/","meaning":"tính khát, sự khao khát","pos":"Danh từ","family":"thirst","page":39,"target":true,"morph":"suffix"},{"word":"thirsting","structure":"thirst + ing","ipa":"/ˈθɜːr.stɪŋ/","meaning":"hành động khao khát, cảm thấy khát","pos":"Hiện tại phân từ","family":"thirst","page":39,"target":true,"morph":"suffix"},{"word":"thirsted","structure":"thirst + ed","ipa":"/θɜːrstɪd/","meaning":"đã khát, đã khao khát (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"thirst","page":39,"target":true,"morph":"suffix"},{"word":"thirsts","structure":"thirst + s","ipa":"/θɜːrsts/","meaning":"khát (ngôi thứ ba số ít)","pos":"Động từ (ngôi thứ ba số ít)","family":"thirst","page":39,"target":true,"morph":"suffix"},{"word":"thirster","structure":"thirst + er","ipa":"/ˈθɜːr.stər/","meaning":"người cảm thấy khát, người khao khát","pos":"Danh từ","family":"thirst","page":39,"target":true,"morph":"suffix"},{"word":"thirsters","structure":"thirster + s","ipa":"/ˈθɜːr.stərz/","meaning":"những người cảm thấy khát (số nhiều)","pos":"Danh từ (số nhiều)","family":"thirst","page":39,"target":true,"morph":"suffix"}];
+const FAMILIES={"sir":{"family":"sir","rootIpa":"/sɜːr/","items":[{"word":"sir","structure":"gốc từ","ipa":"/sɜːr/","meaning":"ngài, ông (được dùng như một cách xưng hô tôn trọng)","pos":"Danh từ","family":"sir","page":1,"target":true,"morph":"root"},{"word":"sirs","structure":"sir + s","ipa":"/sɜːrz/","meaning":"các ngài, các ông (số nhiều)","pos":"Danh từ (số nhiều)","family":"sir","page":1,"target":true,"morph":"suffix"}]},"fir":{"family":"fir","rootIpa":"/fɜːr/","items":[{"word":"fir","structure":"gốc từ","ipa":"/fɜːr/","meaning":"cây thông (một loại cây có lá kim, thường được sử dụng trong trang trí và xây dựng)","pos":"Danh từ","family":"fir","page":2,"target":true,"morph":"root"},{"word":"firs","structure":"fir + s","ipa":"/fɜːrz/","meaning":"các cây thông (số nhiều)","pos":"Danh từ (số nhiều)","family":"fir","page":2,"target":true,"morph":"suffix"}]},"stir":{"family":"stir","rootIpa":"/stɜːr/","items":[{"word":"stir","structure":"gốc từ","ipa":"/stɜːr/","meaning":"khuấy, đảo (thường chỉ hành động khuấy thức ăn hoặc chất lỏng)","pos":"Động từ","family":"stir","page":3,"target":true,"morph":"root"},{"word":"stirred","structure":"stir + ed","ipa":"/stɜːrd/","meaning":"đã được khuấy, đã được đảo (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"stir","page":3,"target":true,"morph":"suffix"},{"word":"unstirred","structure":"un + stirred","ipa":"/ʌnˈstɜːrd/","meaning":"chưa được khuấy, chưa được đảo","pos":"Tính từ","family":"stir","page":4,"target":true,"morph":"combo"},{"word":"stirring","structure":"stir + ing","ipa":"/ˈstɜːr.ɪŋ/","meaning":"hành động khuấy, đảo hoặc có khả năng kích thích, gợi cảm xúc","pos":"Hiện tại phân từ","family":"stir","page":4,"target":true,"morph":"suffix"},{"word":"stirrings","structure":"stirring + s","ipa":"/ˈstɜːr.ɪŋz/","meaning":"các hành động khuấy, đảo hoặc các cảm xúc, sự kích thích (số nhiều)","pos":"Danh từ (số nhiều)","family":"stir","page":4,"target":true,"morph":"suffix"},{"word":"stirringly","structure":"stirring + ly","ipa":"/ˈstɜːr.ɪŋ.li/","meaning":"một cách kích thích, gợi cảm xúc","pos":"Trạng từ","family":"stir","page":4,"target":true,"morph":"suffix"},{"word":"stirs","structure":"stir + s","ipa":"/stɜːrz/","meaning":"khuấy (ngôi thứ ba số ít)","pos":"Động từ (ngôi thứ ba số ít)","family":"stir","page":4,"target":true,"morph":"suffix"},{"word":"stirrer","structure":"stir + er","ipa":"/ˈstɜːr.ər/","meaning":"dụng cụ khuấy hoặc người khuấy","pos":"Danh từ","family":"stir","page":4,"target":true,"morph":"suffix"},{"word":"stirrers","structure":"stirrer + s","ipa":"/ˈstɜːr.ərz/","meaning":"các dụng cụ khuấy hoặc những người khuấy","pos":"Danh từ (số nhiều)","family":"stir","page":4,"target":true,"morph":"suffix"}]},"whir":{"family":"whir","rootIpa":"/wɜːr/","items":[{"word":"whir","structure":"gốc từ","ipa":"/wɜːr/","meaning":"phát ra tiếng kêu vù vù (thường chỉ âm thanh của máy móc hoặc cánh quạt)","pos":"Động từ","family":"whir","page":5,"target":true,"morph":"root"},{"word":"whirs","structure":"whir + s","ipa":"/wɜːrz/","meaning":"phát ra tiếng kêu vù vù (ngôi thứ ba số ít)","pos":"Động từ (ngôi thứ ba số ít)","family":"whir","page":5,"target":true,"morph":"suffix"},{"word":"whirred","structure":"whir + ed","ipa":"/wɜːrd/","meaning":"đã phát ra tiếng kêu vù vù (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"whir","page":5,"target":true,"morph":"suffix"},{"word":"whirring","structure":"whir + ing","ipa":"/ˈwɜːr.ɪŋ/","meaning":"hành động phát ra tiếng kêu vù vù","pos":"Hiện tại phân từ","family":"whir","page":5,"target":true,"morph":"suffix"}]},"bird":{"family":"bird","rootIpa":"/bɜːrd/","items":[{"word":"bird","structure":"gốc từ","ipa":"/bɜːrd/","meaning":"chim, loài chim","pos":"Danh từ","family":"bird","page":6,"target":true,"morph":"root"},{"word":"birds","structure":"bird + s","ipa":"/bɜːrdz/","meaning":"các loài chim (số nhiều)","pos":"Danh từ (số nhiều)","family":"bird","page":6,"target":true,"morph":"suffix"},{"word":"birding","structure":"bird + ing","ipa":"/ˈbɜːrd.ɪŋ/","meaning":"hành động quan sát chim, thường như một sở thích","pos":"Hiện tại phân từ","family":"bird","page":6,"target":true,"morph":"suffix"},{"word":"birder","structure":"bird + er","ipa":"/ˈbɜːr.dər/","meaning":"người quan sát chim","pos":"Danh từ","family":"bird","page":6,"target":true,"morph":"suffix"},{"word":"birders","structure":"birder + s","ipa":"/ˈbɜːr.dərz/","meaning":"những người quan sát chim (số nhiều)","pos":"Danh từ (số nhiều)","family":"bird","page":6,"target":true,"morph":"suffix"},{"word":"birded","structure":"bird + ed","ipa":"/bɜːrdɪd/","meaning":"đã quan sát chim (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"bird","page":7,"target":true,"morph":"suffix"}]},"third":{"family":"third","rootIpa":"/θɜːrd/","items":[{"word":"third","structure":"gốc từ","ipa":"/θɜːrd/","meaning":"thứ ba, một phần ba","pos":"Tính từ / Danh từ","family":"third","page":8,"target":true,"morph":"root"},{"word":"thirdly","structure":"third + ly","ipa":"/ˈθɜːrd.li/","meaning":"một cách thứ ba, chỉ ra thứ ba trong một danh sách","pos":"Trạng từ","family":"third","page":8,"target":true,"morph":"suffix"},{"word":"thirdlys","structure":"thirdly + s","ipa":"/ˈθɜːrd.liːz/","meaning":"các cách thứ ba (số nhiều, ít dùng)","pos":"Trạng từ (số nhiều)","family":"third","page":8,"target":true,"morph":"suffix"},{"word":"thirds","structure":"third + s","ipa":"/θɜːrdz/","meaning":"các phần ba (số nhiều)","pos":"Danh từ (số nhiều)","family":"third","page":8,"target":true,"morph":"suffix"}]},"firm":{"family":"firm","rootIpa":"/fɜːrm/","items":[{"word":"firm","structure":"gốc từ","ipa":"/fɜːrm/","meaning":"vững chắc, kiên quyết, công ty","pos":"Tính từ / Danh từ","family":"firm","page":9,"target":true,"morph":"root"},{"word":"firmly","structure":"firm + ly","ipa":"/ˈfɜːrm.li/","meaning":"một cách kiên quyết, chắc chắn","pos":"Trạng từ","family":"firm","page":9,"target":true,"morph":"suffix"},{"word":"firms","structure":"firm + s","ipa":"/fɜːrmz/","meaning":"các công ty (số nhiều)","pos":"Danh từ (số nhiều)","family":"firm","page":9,"target":true,"morph":"suffix"},{"word":"firmness","structure":"firm + ness","ipa":"/ˈfɜːrm.nəs/","meaning":"tính kiên quyết, sự vững chắc","pos":"Danh từ","family":"firm","page":9,"target":true,"morph":"suffix"},{"word":"firmnesses","structure":"firmness + es","ipa":"/ˈfɜːrm.nəs.ɪz/","meaning":"các tính kiên quyết (số nhiều)","pos":"Danh từ (số nhiều)","family":"firm","page":9,"target":true,"morph":"suffix"},{"word":"firmer","structure":"firm + er","ipa":"/ˈfɜːr.mər/","meaning":"kiên quyết hơn, chắc chắn hơn","pos":"Tính từ","family":"firm","page":9,"target":true,"morph":"suffix"},{"word":"infirm","structure":"gốc từ","ipa":"/ɪnˈfɜːrm/","meaning":"yếu đuối, không khỏe, thường chỉ người già hoặc người bệnh","pos":"Tính từ","family":"firm","page":10,"target":true,"morph":"prefix"},{"word":"infirmity","structure":"infirm + ity","ipa":"/ɪnˈfɜːr.mə.ti/","meaning":"tình trạng yếu đuối, bệnh tật","pos":"Danh từ","family":"firm","page":10,"target":true,"morph":"combo"},{"word":"infirmities","structure":"infirmity + ies","ipa":"/ɪnˈfɜːr.mə.tiz/","meaning":"các tình trạng yếu đuối (số nhiều)","pos":"Danh từ (số nhiều)","family":"firm","page":10,"target":true,"morph":"combo"},{"word":"infirmly","structure":"infirm + ly","ipa":"/ɪnˈfɜːr.mli/","meaning":"một cách yếu đuối, không khỏe","pos":"Trạng từ","family":"firm","page":10,"target":true,"morph":"combo"},{"word":"infirmer","structure":"infirm + er","ipa":"/ɪnˈfɜːrmər/","meaning":"người yếu đuối hơn, người không khỏe","pos":"Danh từ","family":"firm","page":10,"target":true,"morph":"combo"},{"word":"firmest","structure":"firm + est","ipa":"/ˈfɜːr.məst/","meaning":"chắc chắn nhất, kiên quyết nhất","pos":"Tính từ","family":"firm","page":10,"target":true,"morph":"suffix"},{"word":"firmed","structure":"firm + ed","ipa":"/fɜːrmd/","meaning":"đã được làm vững chắc","pos":"Quá khứ phân từ","family":"firm","page":10,"target":true,"morph":"suffix"},{"word":"firming","structure":"firm + ing","ipa":"/ˈfɜːrm.ɪŋ/","meaning":"hành động làm vững chắc","pos":"Hiện tại phân từ","family":"firm","page":10,"target":true,"morph":"suffix"},{"word":"unfirm","structure":"un + firm","ipa":"/ʌnˈfɜːrm/","meaning":"không chắc chắn, không kiên quyết","pos":"Tính từ","family":"firm","page":10,"target":true,"morph":"prefix"}]},"dirt":{"family":"dirt","rootIpa":"/dɜːrt/","items":[{"word":"dirt","structure":"gốc từ","ipa":"/dɜːrt/","meaning":"bụi bẩn, đất bẩn","pos":"Danh từ","family":"dirt","page":11,"target":true,"morph":"root"},{"word":"dirty","structure":"gốc từ","ipa":"/ˈdɜːr.ti/","meaning":"bẩn, không sạch","pos":"Tính từ","family":"dirt","page":11,"target":true,"morph":"suffix"},{"word":"dirtiest","structure":"dirty + est","ipa":"/ˈdɜːr.ti.əst/","meaning":"bẩn nhất, không sạch nhất","pos":"Tính từ","family":"dirt","page":11,"target":true,"morph":"suffix"},{"word":"dirtier","structure":"dirty + er","ipa":"/ˈdɜːr.ti.ər/","meaning":"bẩn hơn","pos":"Tính từ","family":"dirt","page":12,"target":true,"morph":"suffix"},{"word":"dirtied","structure":"dirty + ed","ipa":"/ˈdɜːr.tiːd/","meaning":"đã trở nên bẩn (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"dirt","page":12,"target":true,"morph":"suffix"},{"word":"dirtiness","structure":"dirty + ness","ipa":"/ˈdɜːr.ti.nəs/","meaning":"tính bẩn, sự không sạch","pos":"Danh từ","family":"dirt","page":12,"target":true,"morph":"suffix"},{"word":"dirtying","structure":"dirty + ing","ipa":"/ˈdɜːr.ti.ɪŋ/","meaning":"hành động làm bẩn","pos":"Hiện tại phân từ","family":"dirt","page":12,"target":true,"morph":"suffix"},{"word":"dirtily","structure":"dirty + ly","ipa":"/ˈdɜːr.ti.li/","meaning":"một cách bẩn thỉu","pos":"Trạng từ","family":"dirt","page":12,"target":true,"morph":"suffix"},{"word":"dirties","structure":"dirty + es","ipa":"/ˈdɜːr.tiz/","meaning":"làm bẩn (ngôi thứ ba số ít)","pos":"Động từ (ngôi thứ ba số ít)","family":"dirt","page":12,"target":true,"morph":"suffix"},{"word":"dirts","structure":"dirt + s","ipa":"/dɜːrts/","meaning":"các bụi bẩn hoặc đất bẩn (số nhiều)","pos":"Danh từ (số nhiều)","family":"dirt","page":12,"target":true,"morph":"suffix"}]},"skirt":{"family":"skirt","rootIpa":"/skɜːrt/","items":[{"word":"skirt","structure":"gốc từ","ipa":"/skɜːrt/","meaning":"váy, lớp vỏ ngoài, hoặc phần bên ngoài của một vật thể","pos":"Danh từ / Động từ","family":"skirt","page":13,"target":true,"morph":"root"},{"word":"skirts","structure":"skirt + s","ipa":"/skɜːrts/","meaning":"các chiếc váy (số nhiều) hoặc làm cho cái gì đó quay quanh (ngôi thứ ba số ít)","pos":"Danh từ (số nhiều) / Động từ (ngôi thứ ba số ít)","family":"skirt","page":13,"target":true,"morph":"suffix"},{"word":"skirted","structure":"skirt + ed","ipa":"/skɜːr.tɪd/","meaning":"đã được bao quanh hoặc được che phủ","pos":"Quá khứ phân từ","family":"skirt","page":13,"target":true,"morph":"suffix"},{"word":"skirting","structure":"skirt + ing","ipa":"/ˈskɜːr.tɪŋ/","meaning":"hành động bao quanh hoặc che phủ","pos":"Hiện tại phân từ","family":"skirt","page":13,"target":true,"morph":"suffix"},{"word":"underskirt","structure":"under + skirt","ipa":"/ˈʌn.dər.skɜːrt/","meaning":"lớp váy bên trong, thường dùng để tạo độ phồng cho váy bên ngoài","pos":"Danh từ","family":"skirt","page":14,"target":true,"morph":"prefix"},{"word":"underskirts","structure":"underskirt + s","ipa":"/ˈʌn.dər.skɜːrts/","meaning":"các lớp váy bên trong","pos":"Danh từ (số nhiều)","family":"skirt","page":14,"target":true,"morph":"combo"},{"word":"overskirt","structure":"over + skirt","ipa":"/ˈəʊ.vər.skɜːrt/","meaning":"lớp váy bên ngoài, thường dùng để che phủ hoặc trang trí","pos":"Danh từ","family":"skirt","page":14,"target":true,"morph":"prefix"},{"word":"overskirts","structure":"overskirt + s","ipa":"/ˈəʊ.vər.skɜːrts/","meaning":"các lớp váy bên ngoài","pos":"Danh từ (số nhiều)","family":"skirt","page":14,"target":true,"morph":"combo"}]},"shirt":{"family":"shirt","rootIpa":"/ʃɜːrt/","items":[{"word":"shirt","structure":"gốc từ","ipa":"/ʃɜːrt/","meaning":"áo sơ mi, áo thun","pos":"Danh từ","family":"shirt","page":15,"target":true,"morph":"root"},{"word":"shirts","structure":"shirt + s","ipa":"/ʃɜːrts/","meaning":"các chiếc áo (số nhiều)","pos":"Danh từ (số nhiều)","family":"shirt","page":15,"target":true,"morph":"suffix"},{"word":"undershirt","structure":"under + shirt","ipa":"/ˈʌn.dər.ʃɜːrt/","meaning":"áo lót, thường mặc bên trong áo sơ mi hoặc áo khác","pos":"Danh từ","family":"shirt","page":15,"target":true,"morph":"prefix"},{"word":"undershirts","structure":"undershirt + s","ipa":"/ˈʌn.dər.ʃɜːrts/","meaning":"các áo lót (số nhiều)","pos":"Danh từ (số nhiều)","family":"shirt","page":15,"target":true,"morph":"combo"},{"word":"shirted","structure":"shirt + ed","ipa":"/ʃɜːr.tɪd/","meaning":"đã mặc áo, được bao phủ bởi áo (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"shirt","page":15,"target":true,"morph":"suffix"}]},"flirt":{"family":"flirt","rootIpa":"/flɜːrt/","items":[{"word":"flirt","structure":"gốc từ","ipa":"/flɜːrt/","meaning":"tán tỉnh, thể hiện sự quan tâm lãng mạn một cách nhẹ nhàng","pos":"Động từ","family":"flirt","page":16,"target":true,"morph":"root"},{"word":"flirtation","structure":"flirt + ation","ipa":"/flɜːrˈteɪ.ʃən/","meaning":"hành động tán tỉnh, sự tán tỉnh","pos":"Danh từ","family":"flirt","page":16,"target":true,"morph":"suffix"},{"word":"flirtations","structure":"flirtation + s","ipa":"/flɜːrˈteɪ.ʃənz/","meaning":"các hành động tán tỉnh (số nhiều)","pos":"Danh từ (số nhiều)","family":"flirt","page":17,"target":true,"morph":"suffix"},{"word":"flirting","structure":"flirt + ing","ipa":"/ˈflɜːr.tɪŋ/","meaning":"hành động tán tỉnh","pos":"Hiện tại phân từ","family":"flirt","page":17,"target":true,"morph":"suffix"},{"word":"flirtings","structure":"flirting + s","ipa":"/ˈflɜːr.tɪŋz/","meaning":"các hành động tán tỉnh (số nhiều)","pos":"Danh từ (số nhiều)","family":"flirt","page":17,"target":true,"morph":"suffix"},{"word":"flirted","structure":"flirt + ed","ipa":"/flɜːrtɪd/","meaning":"đã tán tỉnh (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"flirt","page":17,"target":true,"morph":"suffix"},{"word":"flirts","structure":"flirt + s","ipa":"/flɜːrts/","meaning":"tán tỉnh (ngôi thứ ba số ít)","pos":"Động từ (ngôi thứ ba số ít)","family":"flirt","page":17,"target":true,"morph":"suffix"},{"word":"flirtatious","structure":"flirt + atious","ipa":"/ˌflɜːrˈteɪ.ʃəs/","meaning":"có vẻ tán tỉnh, thể hiện sự thu hút lãng mạn","pos":"Tính từ","family":"flirt","page":17,"target":true,"morph":"suffix"},{"word":"flirtatiously","structure":"flirtatious + ly","ipa":"/ˌflɜːr. ˈteɪ.ʃəs.li/","meaning":"một cách tán tỉnh, thể hiện sự thu hút lãng mạn","pos":"Trạng từ","family":"flirt","page":17,"target":true,"morph":"suffix"}]},"squirt":{"family":"squirt","rootIpa":"/skwɜːrt/","items":[{"word":"squirt","structure":"gốc từ","ipa":"/skwɜːrt/","meaning":"phun ra, xịt ra (thường chỉ chất lỏng)","pos":"Động từ","family":"squirt","page":18,"target":true,"morph":"root"},{"word":"squirted","structure":"squirt + ed","ipa":"/skwɜːrtɪd/","meaning":"đã được phun ra, đã được xịt ra","pos":"Quá khứ phân từ","family":"squirt","page":18,"target":true,"morph":"suffix"},{"word":"squirting","structure":"squirt + ing","ipa":"/ˈskwɜːr.tɪŋ/","meaning":"hành động phun ra, xịt ra","pos":"Hiện tại phân từ","family":"squirt","page":18,"target":true,"morph":"suffix"},{"word":"squirts","structure":"squirt + s","ipa":"/skwɜːrts/","meaning":"phun ra, xịt ra (ngôi thứ ba số ít)","pos":"Động từ (ngôi thứ ba số ít)","family":"squirt","page":18,"target":true,"morph":"suffix"},{"word":"squirter","structure":"squirt + er","ipa":"/ˈskwɜːr.tər/","meaning":"người hoặc vật phun ra, xịt ra","pos":"Danh từ","family":"squirt","page":19,"target":true,"morph":"suffix"},{"word":"squirters","structure":"squirter + s","ipa":"/ˈskwɜːr.tərz/","meaning":"những người hoặc vật phun ra, xịt ra","pos":"Danh từ (số nhiều)","family":"squirt","page":19,"target":true,"morph":"suffix"}]},"squirm":{"family":"squirm","rootIpa":"/skwɜːrm/","items":[{"word":"squirm","structure":"gốc từ","ipa":"/skwɜːrm/","meaning":"quằn quại, lăn lóc, (thường chỉ hành động của cơ thể khi cảm thấy khó chịu)","pos":"Động từ","family":"squirm","page":20,"target":true,"morph":"root"},{"word":"squirmed","structure":"squirm + ed","ipa":"/skwɜːrmd/","meaning":"đã quằn quại, đã lăn lóc (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"squirm","page":20,"target":true,"morph":"suffix"},{"word":"squirming","structure":"squirm + ing","ipa":"/ˈskwɜːr.mɪŋ/","meaning":"hành động quằn quại, lăn lóc","pos":"Hiện tại phân từ","family":"squirm","page":20,"target":true,"morph":"suffix"},{"word":"squirms","structure":"squirm + s","ipa":"/skwɜːrmz/","meaning":"quằn quại (ngôi thứ ba số ít)","pos":"Động từ (ngôi thứ ba số ít)","family":"squirm","page":21,"target":true,"morph":"suffix"},{"word":"squirmer","structure":"squirm + er","ipa":"/ˈskwɜːr.mər/","meaning":"người quằn quại, người lăn lóc","pos":"Danh từ","family":"squirm","page":21,"target":true,"morph":"suffix"},{"word":"squirmers","structure":"squirmer + s","ipa":"/ˈskwɜːr.mərz/","meaning":"những người quằn quại (số nhiều)","pos":"Danh từ (số nhiều)","family":"squirm","page":21,"target":true,"morph":"suffix"}]},"girl":{"family":"girl","rootIpa":"/ɡɜːrl/","items":[{"word":"girl","structure":"gốc từ","ipa":"/ɡɜːrl/","meaning":"cô gái, trẻ em gái","pos":"Danh từ","family":"girl","page":22,"target":true,"morph":"root"},{"word":"girls","structure":"girl + s","ipa":"/ɡɜːrlz/","meaning":"các cô gái (số nhiều)","pos":"Danh từ (số nhiều)","family":"girl","page":22,"target":true,"morph":"suffix"},{"word":"girlish","structure":"girl + ish","ipa":"/ˈɡɜːrl.ɪʃ/","meaning":"có tính cách hoặc đặc điểm của một cô gái, ngây thơ","pos":"Tính từ","family":"girl","page":22,"target":true,"morph":"suffix"},{"word":"girlishness","structure":"girlish + ness","ipa":"/ˈɡɜːrl.ɪʃ.nəs/","meaning":"tính trạng ngây thơ, có đặc điểm của cô gái","pos":"Danh từ","family":"girl","page":23,"target":true,"morph":"suffix"},{"word":"girlishly","structure":"girlish + ly","ipa":"/ˈɡɜːrl.ɪʃ.li/","meaning":"một cách ngây thơ, có tính chất của cô gái","pos":"Trạng từ","family":"girl","page":23,"target":true,"morph":"suffix"},{"word":"girlhood","structure":"girl + hood","ipa":"/ˈɡɜːrl.hʊd/","meaning":"thời kỳ thiếu nữ, tuổi thơ của một cô gái","pos":"Danh từ","family":"girl","page":23,"target":true,"morph":"suffix"},{"word":"girlhoods","structure":"girlhood + s","ipa":"/ˈɡɜːrl.hʊdz/","meaning":"các thời kỳ thiếu nữ (số nhiều)","pos":"Danh từ (số nhiều)","family":"girl","page":23,"target":true,"morph":"suffix"}]},"swirl":{"family":"swirl","rootIpa":"/swɜːrl/","items":[{"word":"swirl","structure":"gốc từ","ipa":"/swɜːrl/","meaning":"xoáy, cuộn, làm cho một chất lỏng hoặc vật thể chuyển động theo hình xoáy","pos":"Động từ","family":"swirl","page":24,"target":true,"morph":"root"},{"word":"swirling","structure":"swirl + ing","ipa":"/ˈswɜːr.lɪŋ/","meaning":"hành động xoáy, cuộn","pos":"Hiện tại phân từ","family":"swirl","page":24,"target":true,"morph":"suffix"},{"word":"swirled","structure":"swirl + ed","ipa":"/swɜːrld/","meaning":"đã xoáy, đã cuộn (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"swirl","page":24,"target":true,"morph":"suffix"},{"word":"swirls","structure":"swirl + s","ipa":"/swɜːrlz/","meaning":"xoáy (ngôi thứ ba số ít)","pos":"Động từ (ngôi thứ ba số ít)","family":"swirl","page":24,"target":true,"morph":"suffix"}]},"twirl":{"family":"twirl","rootIpa":"/twɜːrl/","items":[{"word":"twirl","structure":"gốc từ","ipa":"/twɜːrl/","meaning":"xoay tròn, quay vòng, thường chỉ hành động xoay một cách nhẹ nhàng","pos":"Động từ","family":"twirl","page":25,"target":true,"morph":"root"},{"word":"twirling","structure":"twirl + ing","ipa":"/ˈtwɜːr.lɪŋ/","meaning":"hành động xoay tròn, quay vòng","pos":"Hiện tại phân từ","family":"twirl","page":25,"target":true,"morph":"suffix"},{"word":"twirled","structure":"twirl + ed","ipa":"/twɜːrld/","meaning":"đã xoay tròn, đã quay vòng (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"twirl","page":25,"target":true,"morph":"suffix"},{"word":"twirls","structure":"twirl + s","ipa":"/twɜːrlz/","meaning":"xoay tròn (ngôi thứ ba số ít)","pos":"Động từ (ngôi thứ ba số ít)","family":"twirl","page":25,"target":true,"morph":"suffix"},{"word":"twirler","structure":"twirl + er","ipa":"/ˈtwɜːr.lər/","meaning":"người xoay tròn, người quay vòng","pos":"Danh từ","family":"twirl","page":25,"target":true,"morph":"suffix"},{"word":"twirlers","structure":"twirler + s","ipa":"/ˈtwɜːr.lərz/","meaning":"những người xoay tròn (số nhiều)","pos":"Danh từ (số nhiều)","family":"twirl","page":26,"target":true,"morph":"suffix"}]},"whirl":{"family":"whirl","rootIpa":"/wɜːrl/","items":[{"word":"whirl","structure":"gốc từ","ipa":"/wɜːrl/","meaning":"xoay, quay tròn, thường chỉ hành động chuyển động theo hình tròn","pos":"Động từ","family":"whirl","page":27,"target":true,"morph":"root"},{"word":"whirled","structure":"whirl + ed","ipa":"/wɜːrld/","meaning":"đã xoay, đã quay tròn (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"whirl","page":27,"target":true,"morph":"suffix"},{"word":"whirling","structure":"whirl + ing","ipa":"/ˈwɜːr.lɪŋ/","meaning":"hành động xoay, quay tròn","pos":"Hiện tại phân từ","family":"whirl","page":27,"target":true,"morph":"suffix"},{"word":"whirlings","structure":"whirling + s","ipa":"/ˈwɜːr.lɪŋz/","meaning":"các hành động xoay (số nhiều)","pos":"Danh từ (số nhiều)","family":"whirl","page":27,"target":true,"morph":"suffix"},{"word":"whirls","structure":"whirl + s","ipa":"/wɜːrlz/","meaning":"xoay (ngôi thứ ba số ít)","pos":"Động từ (ngôi thứ ba số ít)","family":"whirl","page":27,"target":true,"morph":"suffix"},{"word":"whirler","structure":"whirl + er","ipa":"/ˈwɜːr.lər/","meaning":"người xoay tròn, người quay","pos":"Danh từ","family":"whirl","page":28,"target":true,"morph":"suffix"},{"word":"whirlers","structure":"whirler + s","ipa":"/ˈwɜːr.lərz/","meaning":"những người xoay tròn (số nhiều)","pos":"Danh từ (số nhiều)","family":"whirl","page":28,"target":true,"morph":"suffix"}]},"birth":{"family":"birth","rootIpa":"/bɜːrθ/","items":[{"word":"birth","structure":"gốc từ","ipa":"/bɜːrθ/","meaning":"sự ra đời, sự sinh sản","pos":"Danh từ","family":"birth","page":29,"target":true,"morph":"root"},{"word":"births","structure":"birth + s","ipa":"/bɜːrθs/","meaning":"các sự ra đời (số nhiều)","pos":"Danh từ (số nhiều)","family":"birth","page":29,"target":true,"morph":"suffix"},{"word":"rebirth","structure":"re + birth","ipa":"/riːˈbɜːrθ/","meaning":"sự tái sinh, sự sinh lại","pos":"Danh từ","family":"birth","page":29,"target":true,"morph":"prefix"},{"word":"rebirths","structure":"rebirth + s","ipa":"/riːˈbɜːrθs/","meaning":"các sự tái sinh (số nhiều)","pos":"Danh từ (số nhiều)","family":"birth","page":29,"target":true,"morph":"combo"},{"word":"birthing","structure":"birth + ing","ipa":"/ˈbɜːr.θɪŋ/","meaning":"hành động sinh con, quá trình sinh sản","pos":"Hiện tại phân từ","family":"birth","page":29,"target":true,"morph":"suffix"},{"word":"birthings","structure":"birthing + s","ipa":"/ˈbɜːr.θɪŋz/","meaning":"các hành động sinh con (số nhiều)","pos":"Danh từ (số nhiều)","family":"birth","page":30,"target":true,"morph":"suffix"},{"word":"birthed","structure":"birth + ed","ipa":"/bɜːrθt/","meaning":"đã sinh ra (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"birth","page":30,"target":true,"morph":"suffix"}]},"mirth":{"family":"mirth","rootIpa":"/mɜːrθ/","items":[{"word":"mirth","structure":"gốc từ","ipa":"/mɜːrθ/","meaning":"niềm vui, sự vui vẻ, tiếng cười","pos":"Danh từ","family":"mirth","page":31,"target":true,"morph":"root"},{"word":"mirthful","structure":"mirth + ful","ipa":"/ˈmɜːrθ.fəl/","meaning":"đầy niềm vui, vui vẻ","pos":"Tính từ","family":"mirth","page":31,"target":true,"morph":"suffix"},{"word":"mirthfulness","structure":"mirthful + ness","ipa":"/ˈmɜːrθ.fəl.nəs/","meaning":"tính vui vẻ, sự hạnh phúc","pos":"Danh từ","family":"mirth","page":31,"target":true,"morph":"suffix"},{"word":"mirthfully","structure":"mirthful + ly","ipa":"/ˈmɜːrθ.fəl.i/","meaning":"một cách vui vẻ, hạnh phúc","pos":"Trạng từ","family":"mirth","page":32,"target":true,"morph":"suffix"},{"word":"mirthfulest","structure":"mirthful + est","ipa":"/ˈmɜːrθ.fəl.ɪst/","meaning":"vui vẻ nhất","pos":"Tính từ","family":"mirth","page":32,"target":true,"morph":"suffix"},{"word":"mirthless","structure":"mirth + less","ipa":"/ˈmɜːrθ.ləs/","meaning":"không có niềm vui, buồn bã","pos":"Tính từ","family":"mirth","page":32,"target":true,"morph":"suffix"},{"word":"mirthlessly","structure":"mirthless + ly","ipa":"/ˈmɜːrθ.ləs.li/","meaning":"một cách không vui vẻ, buồn bã","pos":"Trạng từ","family":"mirth","page":32,"target":true,"morph":"suffix"},{"word":"mirths","structure":"mirth + s","ipa":"/mɜːrθs/","meaning":"các niềm vui, tiếng cười (số nhiều)","pos":"Danh từ (số nhiều)","family":"mirth","page":32,"target":true,"morph":"suffix"}]},"first":{"family":"first","rootIpa":"/fɜːrst/","items":[{"word":"first","structure":"gốc từ","ipa":"/fɜːrst/","meaning":"thứ nhất, đầu tiên","pos":"Tính từ / Trạng từ","family":"first","page":33,"target":true,"morph":"root"},{"word":"firstly","structure":"first + ly","ipa":"/ˈfɜːrst.li/","meaning":"trước hết, trước tiên, thường được dùng để liệt kê","pos":"Trạng từ","family":"first","page":33,"target":true,"morph":"suffix"},{"word":"firsts","structure":"first + s","ipa":"/fɜːrsts/","meaning":"các điều đầu tiên (số nhiều)","pos":"Danh từ (số nhiều)","family":"first","page":33,"target":true,"morph":"suffix"}]},"smirk":{"family":"smirk","rootIpa":"/smɜːrk/","items":[{"word":"smirk","structure":"gốc từ","ipa":"/smɜːrk/","meaning":"cười nhếch mép, cười một cách kiêu ngạo hoặc tự mãn","pos":"Động từ","family":"smirk","page":34,"target":true,"morph":"root"},{"word":"smirking","structure":"smirk + ing","ipa":"/ˈsmɜːr.kɪŋ/","meaning":"hành động cười nhếch mép","pos":"Hiện tại phân từ","family":"smirk","page":34,"target":true,"morph":"suffix"},{"word":"smirked","structure":"smirk + ed","ipa":"/smɜːrkd/","meaning":"đã cười nhếch mép (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"smirk","page":34,"target":true,"morph":"suffix"},{"word":"smirks","structure":"smirk + s","ipa":"/smɜːrks/","meaning":"cười nhếch mép (ngôi thứ ba số ít)","pos":"Động từ (ngôi thứ ba số ít)","family":"smirk","page":34,"target":true,"morph":"suffix"},{"word":"smirker","structure":"smirk + er","ipa":"/ˈsmɜːr.kər/","meaning":"người cười nhếch mép, người có thái độ kiêu ngạo","pos":"Danh từ","family":"smirk","page":35,"target":true,"morph":"suffix"},{"word":"smirkers","structure":"smirker + s","ipa":"/ˈsmɜːr.kərz/","meaning":"những người cười nhếch mép (số nhiều)","pos":"Danh từ (số nhiều)","family":"smirk","page":35,"target":true,"morph":"suffix"}]},"chirp":{"family":"chirp","rootIpa":"/tʃɜːrp/","items":[{"word":"chirp","structure":"gốc từ","ipa":"/tʃɜːrp/","meaning":"kêu, hót (thường chỉ âm thanh của chim hoặc côn trùng)","pos":"Động từ","family":"chirp","page":36,"target":true,"morph":"root"},{"word":"chirping","structure":"chirp + ing","ipa":"/ˈtʃɜːr.pɪŋ/","meaning":"hành động kêu, hót","pos":"Hiện tại phân từ","family":"chirp","page":36,"target":true,"morph":"suffix"},{"word":"chirped","structure":"chirp + ed","ipa":"/tʃɜːrpt/","meaning":"đã kêu, đã hót (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"chirp","page":36,"target":true,"morph":"suffix"},{"word":"chirpy","structure":"gốc từ","ipa":"/ˈtʃɜːr.pi/","meaning":"vui vẻ, hoạt bát (thường mô tả tâm trạng hoặc âm thanh vui tươi)","pos":"Tính từ","family":"chirp","page":37,"target":true,"morph":"suffix"},{"word":"chirpiness","structure":"chirpy + ness","ipa":"/ˈtʃɜːr.pi.nəs/","meaning":"tính vui vẻ, sự hoạt bát","pos":"Danh từ","family":"chirp","page":37,"target":true,"morph":"suffix"},{"word":"chirps","structure":"chirp + s","ipa":"/tʃɜːrps/","meaning":"các âm kêu, các tiếng hót (số nhiều)","pos":"Danh từ (số nhiều)","family":"chirp","page":37,"target":true,"morph":"suffix"}]},"thirst":{"family":"thirst","rootIpa":"/θɜːrst/","items":[{"word":"thirst","structure":"gốc từ","ipa":"/θɜːrst/","meaning":"cơn khát, sự khao khát","pos":"Danh từ","family":"thirst","page":38,"target":true,"morph":"root"},{"word":"thirsty","structure":"thirst + y","ipa":"/ˈθɜːrsti/","meaning":"khát, cảm thấy cần nước","pos":"Tính từ","family":"thirst","page":38,"target":true,"morph":"suffix"},{"word":"thirstily","structure":"thirsty + ly","ipa":"/ˈθɜːr.sti.li/","meaning":"một cách khát, với sự khao khát","pos":"Trạng từ","family":"thirst","page":38,"target":true,"morph":"suffix"},{"word":"thirstier","structure":"thirsty + er","ipa":"/ˈθɜːrsti.ər/","meaning":"khát hơn","pos":"Tính từ","family":"thirst","page":39,"target":true,"morph":"suffix"},{"word":"thirstiest","structure":"thirsty + est","ipa":"/ˈθɜːrsti.əst/","meaning":"khát nhất","pos":"Tính từ","family":"thirst","page":39,"target":true,"morph":"suffix"},{"word":"thirstiness","structure":"thirsty + ness","ipa":"/ˈθɜːr.sti.nəs/","meaning":"tính khát, sự khao khát","pos":"Danh từ","family":"thirst","page":39,"target":true,"morph":"suffix"},{"word":"thirsting","structure":"thirst + ing","ipa":"/ˈθɜːr.stɪŋ/","meaning":"hành động khao khát, cảm thấy khát","pos":"Hiện tại phân từ","family":"thirst","page":39,"target":true,"morph":"suffix"},{"word":"thirsted","structure":"thirst + ed","ipa":"/θɜːrstɪd/","meaning":"đã khát, đã khao khát (quá khứ phân từ)","pos":"Quá khứ phân từ","family":"thirst","page":39,"target":true,"morph":"suffix"},{"word":"thirsts","structure":"thirst + s","ipa":"/θɜːrsts/","meaning":"khát (ngôi thứ ba số ít)","pos":"Động từ (ngôi thứ ba số ít)","family":"thirst","page":39,"target":true,"morph":"suffix"},{"word":"thirster","structure":"thirst + er","ipa":"/ˈθɜːr.stər/","meaning":"người cảm thấy khát, người khao khát","pos":"Danh từ","family":"thirst","page":39,"target":true,"morph":"suffix"},{"word":"thirsters","structure":"thirster + s","ipa":"/ˈθɜːr.stərz/","meaning":"những người cảm thấy khát (số nhiều)","pos":"Danh từ (số nhiều)","family":"thirst","page":39,"target":true,"morph":"suffix"}]}};
+const FAMILY_ORDER=["sir", "fir", "stir", "whir", "bird", "third", "firm", "dirt", "skirt", "shirt", "flirt", "squirt", "squirm", "girl", "swirl", "twirl", "whirl", "birth", "mirth", "first", "smirk", "chirp", "thirst"];
+
+const $=s=>document.querySelector(s);
+const $$=s=>[...document.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"]/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]));
+
+let showMeaning=localStorage.getItem('iSpecialMeaning')==='1';
+let activeFamily=localStorage.getItem('iSpecialFamily')||FAMILY_ORDER[0];
+let voices=[];
+
+function loadVoices(){
+  if(!('speechSynthesis' in window)) return;
+  voices=speechSynthesis.getVoices().filter(v=>/^en/i.test(v.lang));
+  $('#voice').innerHTML='<option value="">Giọng đọc tự động</option>'+
+    voices.map((v,i)=>`<option value="${i}">${esc(v.name)} · ${esc(v.lang)}</option>`).join('');
+}
+if('speechSynthesis' in window){loadVoices();speechSynthesis.onvoiceschanged=loadVoices}
+
+function speak(word){
+  if(!('speechSynthesis' in window)) return;
+  speechSynthesis.cancel();
+  const u=new SpeechSynthesisUtterance(word);
+  u.lang='en-GB';u.rate=.84;
+  const idx=$('#voice').value;
+  if(idx!==''&&voices[+idx])u.voice=voices[+idx];
+  speechSynthesis.speak(u);
+}
+window.speak=speak;
+
+function blob(x){
+  return `${x.word} ${x.ipa} ${x.meaning} ${x.structure} ${x.pos} ${x.family}`.toLowerCase()
+}
+
+function card(x){
+  const safe=String(x.word).replace(/'/g,"\\'");
+  const morphName={root:'TỪ GỐC',prefix:'TIỀN TỐ',suffix:'HẬU TỐ / BIẾN ĐỔI',combo:'MỞ RỘNG'}[x.morph];
+  return `<article class="card">
+    <div class="wordRow">
+      <div class="word">${esc(x.word)}</div>
+      <button class="speak" onclick="speak('${safe}')" title="Nghe phát âm">🔊</button>
+    </div>
+    <div class="ipa">${esc(x.ipa)}</div>
+    <span class="badge">${morphName}</span>
+    <div class="meaning">${esc(x.meaning)}</div>
+    <div class="meta">${esc(x.structure)} • ${esc(x.pos)} • Family: ${esc(x.family)} • trang ${x.page}</div>
+  </article>`
+}
+
+function applyMeaning(){
+  $$('.page').forEach(p=>p.classList.toggle('showMeaning',showMeaning));
+  $('#meaningBtn').textContent=showMeaning?'Ẩn nghĩa':'Hiện nghĩa';
+}
+
+function filters(x){
+  const q=$('#search').value.trim().toLowerCase();
+  const fam=$('#familyFilter').value;
+  const morph=$('#morphFilter').value;
+  if(q&&!blob(x).includes(q))return false;
+  if(fam!=='all'&&x.family!==fam)return false;
+  if(morph!=='all'&&x.morph!==morph)return false;
+  return true
+}
+
+function groupedByFamily(items){
+  const groups={};
+  items.forEach(x=>(groups[x.family]||(groups[x.family]=[])).push(x));
+  return FAMILY_ORDER.filter(f=>groups[f]?.length).map(f=>`
+    <div class="block">
+      <button class="blockHead" onclick="this.parentElement.classList.toggle('closed')">
+        <span class="arrow">▼</span><span class="familyName">${esc(f)}</span>
+        <span class="count">(${groups[f].length} từ)</span>
+      </button>
+      <div class="blockBody"><div class="grid">${groups[f].map(card).join('')}</div></div>
+    </div>
+  `).join('')||'<div class="empty">Không tìm thấy dữ liệu phù hợp.</div>'
+}
+
+function renderAll(){
+  const items=DATA.filter(filters);
+  $('#allInfo').innerHTML=`<span class="chip">Đang hiển thị: ${items.length} từ</span><span class="chip">Âm mục tiêu: /ɜː/</span>`;
+  $('#allBlocks').innerHTML=groupedByFamily(items);
+  applyMeaning()
+}
+
+function morphLabel(type){
+  return {
+    root:['TỪ GỐC','root'],
+    prefix:['THÊM TIỀN TỐ','prefix'],
+    suffix:['THÊM HẬU TỐ / BIẾN ĐỔI','suffix'],
+    combo:['TIỀN TỐ + HẬU TỐ / DẠNG MỞ RỘNG','combo']
+  }[type]
+}
+
+function morphSections(items){
+  const groups={root:[],prefix:[],suffix:[],combo:[]};
+  items.forEach(x=>(groups[x.morph]||groups.combo).push(x));
+  return ['root','prefix','suffix','combo'].filter(k=>groups[k].length).map(k=>{
+    const [title,cls]=morphLabel(k);
+    return `<section class="morphSection">
+      <div class="morphHead ${cls}"><span>${title}</span><span class="morphCount">${groups[k].length} từ</span></div>
+      <div class="blockBody"><div class="grid">${groups[k].map(card).join('')}</div></div>
+    </section>`
+  }).join('')
+}
+
+function renderFamily(){
+  const chosen=$('#familyFilter').value;
+  if(chosen!=='all'&&FAMILIES[chosen])activeFamily=chosen;
+  if(!FAMILIES[activeFamily])activeFamily=FAMILY_ORDER[0];
+
+  let items=FAMILIES[activeFamily].items;
+  const q=$('#search').value.trim().toLowerCase();
+  const morph=$('#morphFilter').value;
+  if(q)items=items.filter(x=>blob(x).includes(q));
+  if(morph!=='all')items=items.filter(x=>x.morph===morph);
+
+  const counts={root:0,prefix:0,suffix:0,combo:0};
+  items.forEach(x=>counts[x.morph]++);
+
+  $('#familyInfo').innerHTML=`
+    <span class="chip">${esc(activeFamily.toUpperCase())}</span>
+    <span class="chip">${items.length} từ</span>
+    <span class="chip">Gốc: ${counts.root}</span>
+    <span class="chip">Tiền tố: ${counts.prefix}</span>
+    <span class="chip">Hậu tố: ${counts.suffix}</span>
+    <span class="chip">Mở rộng: ${counts.combo}</span>`;
+
+  $('#familyBlocks').innerHTML=`
+    <div class="block">
+      <button class="blockHead" onclick="this.parentElement.classList.toggle('closed')">
+        <span class="arrow">▼</span><span class="familyName">${esc(activeFamily)}</span>
+        <span class="count">(${items.length} từ)</span>
+      </button>
+      <div class="blockBody">
+        <div class="familyIntro"><b>IPA từ gốc:</b> ${esc(FAMILIES[activeFamily].rootIpa)} · Trọng tâm của family này trong tài liệu: <b>/ɜː/</b>.</div>
+        ${morphSections(items)}
+      </div>
+    </div>`;
+
+  $$('.famBtn').forEach(b=>b.classList.toggle('active',b.dataset.family===activeFamily));
+  applyMeaning()
+}
+
+$$('.famBtn').forEach(b=>b.onclick=()=>{
+  activeFamily=b.dataset.family;
+  localStorage.setItem('iSpecialFamily',activeFamily);
+  $('#familyFilter').value=activeFamily;
+  renderAll();renderFamily()
+});
+
+// QUIZ – chỉ dùng dữ liệu nguồn: chọn IPA hoặc nghĩa.
+let quiz=[],qIndex=0,qScore=0,qLocked=false;
+function shuffle(a){
+  const x=[...a];
+  for(let i=x.length-1;i>0;i--){
+    const j=Math.floor(Math.random()*(i+1));
+    [x[i],x[j]]=[x[j],x[i]]
+  }
+  return x
+}
+
+function makeQuiz(){
+  quiz=shuffle(DATA).slice(0,10).map((x,i)=>({...x,mode:i%2===0?'ipa':'meaning'}));
+  qIndex=0;qScore=0;qLocked=false;renderQuiz()
+}
+
+function renderQuiz(){
+  $('#progressBar').style.width=`${Math.min(100,qIndex*10)}%`;
+
+  if(qIndex>=quiz.length){
+    $('#progressBar').style.width='100%';
+    const best=Math.max(+localStorage.getItem('iSpecialBest')||0,qScore);
+    localStorage.setItem('iSpecialBest',best);
+    $('#best').textContent=`${best}/10`;
+    $('#quizArea').innerHTML=`<div class="quizWord">${qScore}/10</div><div class="quizMsg">${qScore>=8?'Rất tốt!':qScore>=5?'Khá tốt – hãy luyện thêm.':'Hãy xem lại Word Family rồi thử lại.'}</div>`;
+    return
+  }
+
+  const x=quiz[qIndex];
+  const pool=shuffle(DATA.filter(y=>y.word!==x.word)).slice(0,3);
+  const field=x.mode==='ipa'?'ipa':'meaning';
+  const correct=x[field];
+  const opts=shuffle([correct,...pool.map(y=>y[field])]);
+  const prompt=x.mode==='ipa'?'Chọn phiên âm đúng':'Chọn nghĩa đúng';
+  const safe=String(x.word).replace(/'/g,"\\'");
+
+  $('#quizArea').innerHTML=`
+    <div class="quizPrompt">Câu ${qIndex+1}/10 · ${prompt}</div>
+    <div class="quizWord">${esc(x.word)} <button class="speak" onclick="speak('${safe}')">🔊</button></div>
+    <div class="answers">${opts.map(o=>`<button class="answer" data-answer="${esc(o)}">${esc(o)}</button>`).join('')}</div>
+    <div class="quizMsg" id="quizMsg"></div>`;
+
+  qLocked=false;
+  $$('.answer').forEach(b=>b.onclick=()=>answerQuiz(b,correct))
+}
+
+function answerQuiz(btn,correct){
+  if(qLocked)return;
+  qLocked=true;
+  if(btn.dataset.answer===correct){
+    qScore++;btn.classList.add('correct');$('#quizMsg').textContent='✓ Chính xác'
+  }else{
+    btn.classList.add('wrong');
+    $$('.answer').forEach(b=>{if(b.dataset.answer===correct)b.classList.add('correct')});
+    $('#quizMsg').textContent='Đáp án đã được đánh dấu.'
+  }
+  setTimeout(()=>{qIndex++;renderQuiz()},900)
+}
+
+$('#startQuiz').onclick=makeQuiz;
+$('#best').textContent=`${+localStorage.getItem('iSpecialBest')||0}/10`;
+
+$('#meaningBtn').onclick=()=>{
+  showMeaning=!showMeaning;
+  localStorage.setItem('iSpecialMeaning',showMeaning?'1':'0');
+  applyMeaning()
+};
+$('#openAll').onclick=()=>$$('.block').forEach(b=>b.classList.remove('closed'));
+$('#closeAll').onclick=()=>$$('.block').forEach(b=>b.classList.add('closed'));
+
+function showPage(page,btn){
+  $$('.tabs button').forEach(x=>x.classList.toggle('active',x===btn));
+  $$('.page').forEach(p=>p.classList.add('hidden'));
+  $('#'+page).classList.remove('hidden');
+  applyMeaning()
+}
+$$('.tabs button').forEach(btn=>btn.onclick=()=>showPage(btn.dataset.page,btn));
+
+$('#search').addEventListener('input',()=>{renderAll();renderFamily()});
+$('#morphFilter').addEventListener('change',()=>{renderAll();renderFamily()});
+$('#familyFilter').addEventListener('change',()=>{
+  const f=$('#familyFilter').value;
+  if(f!=='all'&&FAMILIES[f]){
+    activeFamily=f;
+    localStorage.setItem('iSpecialFamily',activeFamily)
+  }
+  renderAll();renderFamily()
+});
+
+renderAll();renderFamily();applyMeaning();
+</script>
+</body>
+</html>
